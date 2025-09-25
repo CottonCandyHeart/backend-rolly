@@ -1,4 +1,7 @@
 package app.rolly.backend.repository;
 
-public class AchievementRepository {
+import app.rolly.backend.model.Achievement;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AchievementRepository extends JpaRepository<Achievement, Long> {
 }

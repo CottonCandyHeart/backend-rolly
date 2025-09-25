@@ -1,11 +1,15 @@
 package app.rolly.backend.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
+@NoArgsConstructor
+@Data
 @Table(name="Event")
 public class Event {
     @Id
