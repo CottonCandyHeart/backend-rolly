@@ -6,12 +6,14 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
 @Data
-@Table(name="User")
+@Table(name="user")
 public class User {
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "user_seq")
@@ -31,8 +33,28 @@ public class User {
     @Column(nullable = false)
     private LocalDate dateOfBirth;
 
-    @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "organizer_id", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Event> organizedEvents = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "events_attended",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "event_id")
+    )
+    private Set<Event> attendedEvents = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_achievements",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "achievement_id")
+    )
+    private Set<Achievement> achievements = new HashSet<>();
 
 
 }

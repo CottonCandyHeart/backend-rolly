@@ -6,11 +6,12 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
 @Data
-@Table(name="Event")
+@Table(name="event")
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "event_seq")
@@ -24,6 +25,9 @@ public class Event {
     @ManyToOne
     @JoinColumn(name = "organizer_id", nullable = false)
     private User organizer;
+
+    @ManyToMany(mappedBy = "attendees")
+    private Set<User> attendee;
 
     @Column(nullable = false)
     private LocalDate date;
