@@ -19,7 +19,7 @@ public class Trick {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "cathegory", nullable = false)
+    @JoinColumn(name = "cathegory_id", nullable = false)
     private Cathegory cathegory;
 
     @Column(nullable = false, unique = true)

@@ -26,7 +26,7 @@ public class Event {
     @JoinColumn(name = "organizer_id", nullable = false)
     private User organizer;
 
-    @ManyToMany(mappedBy = "attendees")
+    @ManyToMany(mappedBy = "attendedEvents")
     private Set<User> attendee;
 
     @Column(nullable = false)
@@ -35,8 +35,10 @@ public class Event {
     private LocalTime time;
     @Column(nullable = false)
     private String city;
-    @Column(nullable = false)
-    private String localization;
+
+    //@Column(nullable = false)
+    //private String localization;
+
     @Column(nullable = false)
     private String level;
     @Column(nullable = false)
@@ -45,4 +47,8 @@ public class Event {
     private String age;
     @Column(nullable = false)
     private int numOfParticipants;
+
+    @ManyToOne
+    @JoinColumn(name = "location_id", nullable = false)
+    private Location location;
 }

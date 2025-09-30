@@ -20,15 +20,15 @@ public class Achievement {
     )
     private long id;
 
-    @ManyToMany(mappedBy = "achievements")
-    private Set<User> users;
-
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
     private String description;
     @Column(nullable = false)
     private String picturePath;
+
+    @ManyToMany(mappedBy = "achievements")
+    private Set<User> users;
 
 
 }

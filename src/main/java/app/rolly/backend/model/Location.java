@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @Data
@@ -17,4 +20,26 @@ public class Location {
             allocationSize = 1
     )
     private long id;
+
+    @Column(nullable = false)
+    private String name;        // np. "Park Jordana"
+    private String description;
+    @Column(nullable = false)
+    private String city;
+    @Column(nullable = false)
+    private String country;
+
+    @Column(nullable = false)
+    private double latitude;    // GPS coordinates
+    @Column(nullable = false)
+    private double longitude;
+
+    @ManyToOne
+    @JoinColumn(name = "route_id")
+    private Route route;
+
+    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Event> events = new ArrayList<>();
+
+
 }

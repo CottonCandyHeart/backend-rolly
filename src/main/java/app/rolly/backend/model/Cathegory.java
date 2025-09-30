@@ -21,8 +21,7 @@ public class Cathegory {
     )
     private long id;
 
-    // TODO czy to ma znaczenie gdzie daję mapped a gdzie tworzę tabelę?
-    @OneToMany(mappedBy = "trick_id", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cathegory", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Trick> tricks = new ArrayList<>();
 
     @Column(nullable = false)
