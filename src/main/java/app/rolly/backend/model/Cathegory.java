@@ -19,7 +19,11 @@ public class Cathegory {
             sequenceName = "cathegory_sequence",
             allocationSize = 1
     )
-    private long id;
+    private Long id;
+
+    public Cathegory(String name){
+        this.name = name;
+    }
 
     @OneToMany(mappedBy = "cathegory", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Trick> tricks = new ArrayList<>();

@@ -19,7 +19,15 @@ public class Location {
             sequenceName = "location_sequence",
             allocationSize = 1
     )
-    private long id;
+    private Long id;
+
+    public Location(String name, String city, String country, double latitude, double longitude){
+        this.name = name;
+        this.city = city;
+        this.country = country;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 
     @Column(nullable = false)
     private String name;        // np. "Park Jordana"

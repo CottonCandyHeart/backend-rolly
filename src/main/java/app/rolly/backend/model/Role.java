@@ -19,7 +19,12 @@ public class Role {
             sequenceName = "role_sequence",
             allocationSize = 1
     )
-    private long id;
+    private Long id;
+
+    public Role(String name, String description){
+        this.name = name;
+        this.description = description;
+    }
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<User> users = new ArrayList<>();

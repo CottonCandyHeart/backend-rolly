@@ -18,7 +18,15 @@ public class UserProgress {
             sequenceName = "user_progress_sequence",
             allocationSize = 1
     )
-    private long id;
+    private Long id;
+
+    public UserProgress(double totalDistance, int totalSessions, int totalTricksLearned, int caloriesBurned, LocalDateTime lastUpdated){
+        this.totalDistance = totalDistance;
+        this.totalSessions = totalSessions;
+        this.totalTricksLearned = totalTricksLearned;
+        this.caloriesBurned = caloriesBurned;
+        this.lastUpdated = lastUpdated;
+    }
 
     @Column(nullable = false)
     private double totalDistance;    // sum kilometers

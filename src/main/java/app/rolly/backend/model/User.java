@@ -1,6 +1,7 @@
 package app.rolly.backend.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.Set;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 @Table(name="user")
 public class User {
@@ -22,7 +24,15 @@ public class User {
             sequenceName = "user_sequence",
             allocationSize = 1
     )
-    private long id;
+    private Long id;
+
+    public User(String username, String email, String hashedPasswd, LocalDate dateOfBirth, Role role){
+        this.username = username;
+        this.email = email;
+        this.hashedPasswd = hashedPasswd;
+        this.dateOfBirth = dateOfBirth;
+        this.role = role;
+    }
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -62,7 +72,8 @@ public class User {
     @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Route> routesCreated = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_progress_id")
     private UserProgress userProgress;
 
 }

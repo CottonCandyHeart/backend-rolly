@@ -16,7 +16,14 @@ public class Trick {
             sequenceName = "trick_sequence",
             allocationSize = 1
     )
-    private long id;
+    private Long id;
+
+    public Trick(Cathegory cathegory, String name, String videoLink, String description){
+        this.cathegory = cathegory;
+        this.name = name;
+        this.videoLink = videoLink;
+        this.description = description;
+    }
 
     @ManyToOne
     @JoinColumn(name = "cathegory_id", nullable = false)

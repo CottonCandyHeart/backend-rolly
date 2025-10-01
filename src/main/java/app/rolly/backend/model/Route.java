@@ -19,7 +19,14 @@ public class Route {
             sequenceName = "route_sequence",
             allocationSize = 1
     )
-    private long id;
+    private Long id;
+
+    public Route(String name, double distance, Duration estimatedTime, User createdBy){
+        this.name = name;
+        this.distance = distance;
+        this.estimatedTime = estimatedTime;
+        this.createdBy = createdBy;
+    }
 
     @Column(nullable = false)
     private String name;             // np. "Evening Ride in Kraków"

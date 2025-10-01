@@ -18,7 +18,15 @@ public class Notification {
             sequenceName = "notification_sequence",
             allocationSize = 1
     )
-    private long id;
+    private Long id;
+
+    public Notification(String title, String message, LocalDateTime sentAt, boolean read, User recipient){
+        this.title = title;
+        this.message = message;
+        this.sentAt = sentAt;
+        this.read = read;
+        this.recipient = recipient;
+    }
 
     @Column(nullable = false)
     private String title;

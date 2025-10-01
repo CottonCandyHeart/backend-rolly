@@ -18,7 +18,7 @@ public class Achievement {
             sequenceName = "achievement_sequence",
             allocationSize = 1
     )
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private String name;

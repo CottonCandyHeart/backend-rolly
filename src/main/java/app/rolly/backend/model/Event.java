@@ -20,7 +20,7 @@ public class Event {
             sequenceName = "event_sequence",
             allocationSize = 1
     )
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "organizer_id", nullable = false)
