@@ -18,16 +18,16 @@ public class Trick {
     )
     private Long id;
 
-    public Trick(Cathegory cathegory, String name, String videoLink, String description){
-        this.cathegory = cathegory;
+    public Trick(Category category, String name, String videoLink, String description){
+        this.category = category;
         this.name = name;
         this.videoLink = videoLink;
         this.description = description;
     }
 
     @ManyToOne
-    @JoinColumn(name = "cathegory_id", nullable = false)
-    private Cathegory cathegory;
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
     @Column(nullable = false, unique = true)
     private String name;

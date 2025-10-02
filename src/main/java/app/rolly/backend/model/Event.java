@@ -22,6 +22,19 @@ public class Event {
     )
     private Long id;
 
+    public Event(User organizer, LocalDate date, LocalTime time, String city, String level, String type, String age, int numOfParticipants, Location location){
+        this.organizer = organizer;
+        this.date = date;
+        this.time = time;
+        this.city = city;
+        this.level = level;
+        this.type = type;
+        this.age = age;
+        this.numOfParticipants = numOfParticipants;
+        this.location = location;
+
+    }
+
     @ManyToOne
     @JoinColumn(name = "organizer_id", nullable = false)
     private User organizer;
@@ -35,10 +48,6 @@ public class Event {
     private LocalTime time;
     @Column(nullable = false)
     private String city;
-
-    //@Column(nullable = false)
-    //private String localization;
-
     @Column(nullable = false)
     private String level;
     @Column(nullable = false)

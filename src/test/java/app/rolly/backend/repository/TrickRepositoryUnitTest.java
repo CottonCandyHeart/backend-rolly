@@ -1,6 +1,6 @@
 package app.rolly.backend.repository;
 
-import app.rolly.backend.model.Cathegory;
+import app.rolly.backend.model.Category;
 import app.rolly.backend.model.Trick;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,19 +16,19 @@ public class TrickRepositoryUnitTest {
     @Autowired
     private TrickRepository trickRepository;
     @Autowired
-    private CathegoryRepository cathegoryRepository;
+    private CategoryRepository categoryRepository;
 
-    private Cathegory cathegory;
+    private Category category;
     private Trick trick;
     private Trick savedTrick;
 
     @BeforeEach
     void set(){
-        cathegory = new Cathegory("testCathegory");
-        cathegoryRepository.save(cathegory);
+        category = new Category("testCathegory");
+        categoryRepository.save(category);
 
         trick = new Trick(
-                cathegory,
+                category,
                 "testTrickName",
                 "http://video.com",
                 "test description"
@@ -55,7 +55,7 @@ public class TrickRepositoryUnitTest {
 
         // Then
         assertTrue(foundTrick.isPresent());
-        assertEquals(cathegory, foundTrick.get().getCathegory());
+        assertEquals(category, foundTrick.get().getCategory());
         assertEquals("testTrickName", foundTrick.get().getName());
         assertEquals("http://video.com", foundTrick.get().getVideoLink());
         assertEquals("test description", foundTrick.get().getDescription());

@@ -20,6 +20,12 @@ public class Achievement {
     )
     private Long id;
 
+    public Achievement(String name, String description, String picturePath){
+        this.name = name;
+        this.description = description;
+        this.picturePath = picturePath;
+    }
+
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
