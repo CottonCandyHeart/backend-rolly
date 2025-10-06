@@ -82,4 +82,15 @@ public class NotificationRepositoryUnitTest {
         assertFalse(foundNotification.get().isRead());
         assertEquals(user, foundNotification.get().getRecipient());
     }
+
+    @Test
+    void shouldReturnNullForNonExistingNotification(){
+        // Given
+
+        // When
+        Optional<Notification> foundNotification = notificationRepository.findById(-1L);
+
+        // Then
+        assertTrue(foundNotification.isEmpty());
+    }
 }

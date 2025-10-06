@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -103,4 +104,63 @@ public class EventRepositoryUnitTest {
         assertEquals(location, foundEvent.get().getLocation());
     }
 
+    @Test
+    void shouldReturnNullForNonExistingEvent(){
+        // Given
+
+        // When
+        Optional<Event> foundEvent = eventRepository.findById(-1L);
+
+        // Then
+        assertTrue(foundEvent.isEmpty());
+    }
+
+    @Test
+    void shouldFindParticipants(){
+        // Given
+        LocalDate date1 = LocalDate.of(2002, 2, 2);
+        LocalDate date2 = LocalDate.of(2003, 3, 3);
+        User user1 = new User(
+                "test1",
+                "test1@test1",
+                "test1Password",
+                date1,
+                role
+        );
+        User user2 = new User(
+                "test1",
+                "test1@test1",
+                "test1Password",
+                date2,
+                role
+        );
+        event.getAttendee().add(user1);
+        event.getAttendee().add(user2);
+
+        userRepository.save(user1);
+        userRepository.save(user2);
+        eventRepository.save(event);
+
+        // When
+        Optional<Event> foundEvent = eventRepository.findById(event.getId());
+        Set<User> users = foundEvent.get().getAttendee();
+
+        // Then
+        assertFalse(users.isEmpty());
+        assertEquals(2, users.size());
+        assertTrue(users.contains(user1));
+        assertTrue(users.contains(user2));
+    }
+
+    @Test
+    void shouldReturnEmptyUserSet(){
+        // Given
+
+        // When
+        Optional<Event> foundEvent = eventRepository.findById(event.getId());
+        Set<User> users = foundEvent.get().getAttendee();
+
+        // Then
+        assertTrue(users.isEmpty());
+    }
 }

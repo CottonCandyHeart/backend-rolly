@@ -1,15 +1,17 @@
 package app.rolly.backend.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Table(name="role")
 public class Role {
     @Id
@@ -26,11 +28,12 @@ public class Role {
         this.description = description;
     }
 
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<User> users = new ArrayList<>();
-
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
     private String description;
+
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<User> users = new ArrayList<>();
+
 }

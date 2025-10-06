@@ -60,4 +60,15 @@ public class TrickRepositoryUnitTest {
         assertEquals("http://video.com", foundTrick.get().getVideoLink());
         assertEquals("test description", foundTrick.get().getDescription());
     }
+
+    @Test
+    void shouldReturnNullForNonExistingTrick(){
+        // Given
+
+        // When
+        Optional<Trick> foundTrick = trickRepository.findById(-1L);
+
+        // Then
+        assertTrue(foundTrick.isEmpty());
+    }
 }

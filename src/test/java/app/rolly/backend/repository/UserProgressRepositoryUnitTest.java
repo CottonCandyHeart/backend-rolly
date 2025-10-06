@@ -81,4 +81,15 @@ public class UserProgressRepositoryUnitTest {
         assertEquals(1, foundUserProgress.get().getCaloriesBurned());
         assertEquals(lastUpdate, foundUserProgress.get().getLastUpdated());
     }
+
+    @Test
+    void shouldReturnNullForNonExistingUserProgress(){
+        // Given
+
+        // When
+        Optional<UserProgress> foundUserProgress = userProgressRepository.findById(-1L);
+
+        // Then
+        assertTrue(foundUserProgress.isEmpty());
+    }
 }

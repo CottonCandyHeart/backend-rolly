@@ -1,14 +1,17 @@
 package app.rolly.backend.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Table(name="achievement")
 public class Achievement {
     @Id
@@ -34,7 +37,7 @@ public class Achievement {
     private String picturePath;
 
     @ManyToMany(mappedBy = "achievements")
-    private Set<User> users;
+    private Set<User> users = new HashSet<>();
 
 
 }

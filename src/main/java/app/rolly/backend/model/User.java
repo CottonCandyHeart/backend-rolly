@@ -1,9 +1,7 @@
 package app.rolly.backend.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,9 +11,9 @@ import java.util.Set;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
-@Data
-@Table(name="user")
+@Getter
+@Setter
+@Table(name="users")
 public class User {
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "user_seq")

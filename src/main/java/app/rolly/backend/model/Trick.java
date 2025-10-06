@@ -1,12 +1,14 @@
 package app.rolly.backend.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Table(name="trick")
 public class Trick {
     @Id
@@ -25,14 +27,15 @@ public class Trick {
         this.description = description;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
-
     @Column(nullable = false, unique = true)
     private String name;
     @Column(nullable = false)
     private String videoLink;
     @Column(nullable = false)
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
 }

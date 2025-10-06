@@ -1,15 +1,17 @@
 package app.rolly.backend.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.Duration;
 import java.util.List;
 
 @Entity
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Table(name="route")
 public class Route {
     @Id
@@ -29,7 +31,7 @@ public class Route {
     }
 
     @Column(nullable = false)
-    private String name;             // np. "Evening Ride in Kraków"
+    private String name;             // eg. "Evening Ride in Kraków"
     @Column(nullable = false)
     private double distance;         // kilometers
     @Column(nullable = false)
@@ -39,6 +41,8 @@ public class Route {
     @JoinColumn(name = "user_id", nullable = false)
     private User createdBy;
 
-    @OneToMany(mappedBy = "route", cascade = CascadeType.ALL)
-    private List<Location> points;    // waypoint list
+    //@OneToMany(mappedBy = "route", cascade = CascadeType.ALL)
+    //private List<Location> points;    // waypoint list
+    @Column(columnDefinition = "TEXT")
+    private String encodedPath;
 }

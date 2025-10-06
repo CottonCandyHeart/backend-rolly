@@ -1,15 +1,17 @@
 package app.rolly.backend.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Table(name="category")
 public class Category {
     @Id
@@ -25,9 +27,10 @@ public class Category {
         this.name = name;
     }
 
+    @Column(nullable = false)
+    private String name;
+
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Trick> tricks = new ArrayList<>();
 
-    @Column(nullable = false)
-    private String name;
 }

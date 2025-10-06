@@ -1,16 +1,19 @@
 package app.rolly.backend.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Table(name="event")
 public class Event {
     @Id
@@ -35,13 +38,6 @@ public class Event {
 
     }
 
-    @ManyToOne
-    @JoinColumn(name = "organizer_id", nullable = false)
-    private User organizer;
-
-    @ManyToMany(mappedBy = "attendedEvents")
-    private Set<User> attendee;
-
     @Column(nullable = false)
     private LocalDate date;
     @Column(nullable = false)
@@ -56,6 +52,13 @@ public class Event {
     private String age;
     @Column(nullable = false)
     private int numOfParticipants;
+
+    @ManyToOne
+    @JoinColumn(name = "organizer_id", nullable = false)
+    private User organizer;
+
+    @ManyToMany(mappedBy = "attendedEvents")
+    private Set<User> attendee = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "location_id", nullable = false)

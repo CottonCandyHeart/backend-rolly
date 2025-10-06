@@ -81,4 +81,15 @@ public class RouteRepositoryUnitTest {
         assertEquals(duration, foundRoute.get().getEstimatedTime());
         assertEquals(user, foundRoute.get().getCreatedBy());
     }
+
+    @Test
+    void shouldReturnNullForNonExistingRoute(){
+        // Given
+
+        // When
+        Optional<Route> foundRoute = routeRepository.findById(-1L);
+
+        // Then
+        assertTrue(foundRoute.isEmpty());
+    }
 }
