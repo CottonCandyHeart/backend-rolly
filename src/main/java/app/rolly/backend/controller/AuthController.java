@@ -1,6 +1,7 @@
 package app.rolly.backend.controller;
 
 import app.rolly.backend.auth.JwtUtils;
+import app.rolly.backend.dto.LoginRequest;
 import app.rolly.backend.dto.UserDto;
 import app.rolly.backend.model.Role;
 import app.rolly.backend.repository.RoleRepository;
@@ -44,10 +45,10 @@ public class AuthController {
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<?> login(@RequestBody UserDto userDto){
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
         try{
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPasswd())
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPasswd())
             );
             String jwt = jwtUtils.generateJwtToken(authentication);
             return new ResponseEntity<>(Map.of("token", jwt), HttpStatus.OK);

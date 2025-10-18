@@ -2,6 +2,7 @@ package app.rolly.backendcontroller;
 
 import app.rolly.backend.auth.JwtUtils;
 import app.rolly.backend.controller.AuthController;
+import app.rolly.backend.dto.LoginRequest;
 import app.rolly.backend.dto.UserDto;
 import app.rolly.backend.model.Role;
 import app.rolly.backend.repository.RoleRepository;
@@ -110,9 +111,9 @@ public class AuthControllerUnitTest {
     @Test
     void shouldLoginUserSuccessfully(){
         // Given
-        UserDto userDto = new UserDto();
-        userDto.setUsername("testUser");
-        userDto.setPasswd("testPasswd");
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("testUser");
+        loginRequest.setPasswd("testPasswd");
 
         Authentication auth = mock(Authentication.class);
         when(authenticationManager.authenticate(
@@ -122,7 +123,7 @@ public class AuthControllerUnitTest {
         when(jwtUtils.generateJwtToken(auth)).thenReturn("mocked-jwt-token");
 
         // When
-        ResponseEntity<?> response = authController.login(userDto);
+        ResponseEntity<?> response = authController.login(loginRequest);
 
         // Then
         assertEquals(200, response.getStatusCode().value());
@@ -133,15 +134,15 @@ public class AuthControllerUnitTest {
     @Test
     void shouldFailUserLoginWhenPasswordIsIncorrect(){
         // Given
-        UserDto userDto = new UserDto();
-        userDto.setUsername("testUser");
-        userDto.setPasswd("wrongPasswd");
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("testUser");
+        loginRequest.setPasswd("testPasswd");
 
         when(authenticationManager.authenticate(any()))
                 .thenThrow(new RuntimeException("Bad credentials"));
 
         // When
-        ResponseEntity<?> response = authController.login(userDto);
+        ResponseEntity<?> response = authController.login(loginRequest);
 
         // Then
         assertEquals(401, response.getStatusCode().value());

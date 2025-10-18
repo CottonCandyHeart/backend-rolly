@@ -7,10 +7,10 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class UserDto {
+public class AdminUserDto {
     private String username;
     private String email;
-    private String passwd;
-    private LocalDate birthday;
     private String role;
+    private boolean active;
+    private LocalDate createdAt;
 }

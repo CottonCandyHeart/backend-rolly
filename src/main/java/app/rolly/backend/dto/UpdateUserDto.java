@@ -3,14 +3,9 @@ package app.rolly.backend.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
-
 @Getter
 @Setter
-public class UserDto {
-    private String username;
+public class UpdateUserDto {
     private String email;
-    private String passwd;
-    private LocalDate birthday;
     private String role;
 }

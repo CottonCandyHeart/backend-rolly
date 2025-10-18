@@ -20,17 +20,17 @@ public class Trick {
     )
     private Long id;
 
-    public Trick(Category category, String name, String videoLink, String description){
+    public Trick(Category category, String name, String link, String description){
         this.category = category;
         this.name = name;
-        this.videoLink = videoLink;
+        this.link = link;
         this.description = description;
     }
 
     @Column(nullable = false, unique = true)
     private String name;
     @Column(nullable = false)
-    private String videoLink;
+    private String link;
     @Column(nullable = false)
     private String description;
 
