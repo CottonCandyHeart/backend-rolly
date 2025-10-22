@@ -1,5 +1,6 @@
 package app.rolly.backend.dto;
 
+import app.rolly.backend.model.Event;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,4 +19,15 @@ public class EventDto {
     private String age;
     private int numberOfParticipants;
     private String locationName;
+
+    public EventDto(Event event){
+        this.organizerUsername = event.getOrganizer().getUsername();
+        this.date = event.getDate();
+        this.time = event.getTime();
+        this.city = event.getCity();
+        this.level = event.getLevel();
+        this.age = event.getAge();
+        this.numberOfParticipants = event.getNumOfParticipants();
+        this.locationName = event.getLocation().getName();
+    }
 }

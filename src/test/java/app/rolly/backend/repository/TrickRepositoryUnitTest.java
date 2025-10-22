@@ -57,7 +57,7 @@ public class TrickRepositoryUnitTest {
         assertTrue(foundTrick.isPresent());
         assertEquals(category, foundTrick.get().getCategory());
         assertEquals("testTrickName", foundTrick.get().getName());
-        assertEquals("http://video.com", foundTrick.get().getVideoLink());
+        assertEquals("http://video.com", foundTrick.get().getLink());
         assertEquals("test description", foundTrick.get().getDescription());
     }
 

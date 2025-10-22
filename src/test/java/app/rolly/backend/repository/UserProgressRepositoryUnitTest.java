@@ -50,7 +50,8 @@ public class UserProgressRepositoryUnitTest {
                 1,
                 0,
                 1,
-                lastUpdate
+                lastUpdate,
+                user
         );
         savedUserProgress = userProgressRepository.save(userProgress);
 

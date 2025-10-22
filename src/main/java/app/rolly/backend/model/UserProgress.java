@@ -22,12 +22,13 @@ public class UserProgress {
     )
     private Long id;
 
-    public UserProgress(double totalDistance, int totalSessions, int totalTricksLearned, int caloriesBurned, LocalDateTime lastUpdated){
+    public UserProgress(double totalDistance, int totalSessions, int totalTricksLearned, int caloriesBurned, LocalDateTime lastUpdated, User user){
         this.totalDistance = totalDistance;
         this.totalSessions = totalSessions;
         this.totalTricksLearned = totalTricksLearned;
         this.caloriesBurned = caloriesBurned;
         this.lastUpdated = lastUpdated;
+        this.user = user;
     }
 
     @Column(nullable = false)

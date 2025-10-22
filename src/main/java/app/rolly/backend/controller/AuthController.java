@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.Map;
 
+@SuppressWarnings("ALL")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/auth")
@@ -35,7 +36,7 @@ public class AuthController {
                     userDto.getUsername(),
                     userDto.getEmail(),
                     userDto.getPasswd(),
-                    LocalDate.of(userDto.getYear(), userDto.getMonth(), userDto.getDay()),
+                    userDto.getBirthday(),
                     role
             );
         } catch (IllegalArgumentException e){

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -41,8 +42,14 @@ public class Route {
     @JoinColumn(name = "user_id", nullable = false)
     private User createdBy;
 
-    //@OneToMany(mappedBy = "route", cascade = CascadeType.ALL)
-    //private List<Location> points;    // waypoint list
-    @Column(columnDefinition = "TEXT")
-    private String encodedPath;
+    // no photos
+    //@Column(columnDefinition = "TEXT")
+    //private String encodedPath;
+
+    // photos
+    @OneToMany(mappedBy = "route", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RoutePoint> points = new ArrayList<>();
+
+    @OneToMany(mappedBy = "route", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RoutePhoto> photos = new ArrayList<>();
 }

@@ -1,4 +1,4 @@
-package app.rolly.backendcontroller;
+package app.rolly.backend.controller;
 
 import app.rolly.backend.auth.JwtUtils;
 import app.rolly.backend.controller.AuthController;
@@ -48,9 +48,7 @@ public class AuthControllerUnitTest {
         userDto.setUsername("testUser");
         userDto.setPasswd("testPasswd");
         userDto.setEmail("test@test.pl");
-        userDto.setYear(2000);
-        userDto.setMonth(1);
-        userDto.setDay(1);
+        userDto.setBirthday(LocalDate.of(2000,1,1));
         userDto.setRole("USER");
 
         Role role = new Role("USER", "lorem ipsum");
@@ -79,9 +77,7 @@ public class AuthControllerUnitTest {
         userDto.setUsername("testUser");
         userDto.setPasswd("testPasswd");
         userDto.setEmail("test@test.pl");
-        userDto.setYear(2000);
-        userDto.setMonth(1);
-        userDto.setDay(1);
+        userDto.setBirthday(LocalDate.of(2000,1,1));
         userDto.setRole("USER");
 
         Role role = new Role("USER", "lorem ipsum");
