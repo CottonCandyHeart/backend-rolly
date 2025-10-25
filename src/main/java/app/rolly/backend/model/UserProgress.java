@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -44,4 +46,6 @@ public class UserProgress {
 
     @OneToOne(mappedBy = "userProgress", cascade = CascadeType.ALL, orphanRemoval = true)
     private User user;
+    @ManyToMany(mappedBy = "masteredTricks")
+    Set<Trick> masteredTricks = new HashSet<>();
 }

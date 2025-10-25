@@ -83,6 +83,7 @@ public class UserServiceUnitTest {
         UserResponseDto response = userService.getUserProfile(user);
 
         // Then
+        assertNotNull(response);
         assertEquals(user.getUsername(), response.getUsername());
         assertEquals(user.getEmail(), response.getEmail());
         assertEquals(user.getDateOfBirth(), response.getBirthday());

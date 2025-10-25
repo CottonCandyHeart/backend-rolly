@@ -31,6 +31,7 @@ public class TrickRepositoryUnitTest {
                 category,
                 "testTrickName",
                 "http://video.com",
+                "R",
                 "test description"
         );
         savedTrick = trickRepository.save(trick);
@@ -58,6 +59,7 @@ public class TrickRepositoryUnitTest {
         assertEquals(category, foundTrick.get().getCategory());
         assertEquals("testTrickName", foundTrick.get().getName());
         assertEquals("http://video.com", foundTrick.get().getLink());
+        assertEquals("R", foundTrick.get().getLeg());
         assertEquals("test description", foundTrick.get().getDescription());
     }
 

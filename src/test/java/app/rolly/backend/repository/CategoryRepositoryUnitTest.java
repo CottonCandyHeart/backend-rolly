@@ -68,12 +68,14 @@ public class CategoryRepositoryUnitTest {
                 category,
                 "test1",
                 "test1Link",
+                "R",
                 "lorem ipsum 1"
         );
         Trick trick2 = new Trick(
                 category,
                 "test2",
                 "test2Link",
+                "L",
                 "lorem ipsum 2"
         );
         category.getTricks().add(trick1);
