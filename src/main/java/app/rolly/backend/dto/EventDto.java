@@ -13,7 +13,6 @@ public class EventDto {
     private String organizerUsername;
     private LocalDate date;
     private LocalTime time;
-    private String city;
     private String level;
     private String type;
     private String age;
@@ -24,7 +23,6 @@ public class EventDto {
         this.organizerUsername = event.getOrganizer().getUsername();
         this.date = event.getDate();
         this.time = event.getTime();
-        this.city = event.getCity();
         this.level = event.getLevel();
         this.age = event.getAge();
         this.numberOfParticipants = event.getNumOfParticipants();

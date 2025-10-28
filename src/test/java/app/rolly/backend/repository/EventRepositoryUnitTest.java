@@ -64,7 +64,6 @@ public class EventRepositoryUnitTest {
                 user,
                 eventDate,
                 time,
-                "testCity",
                 "testLevel",
                 "testType",
                 "testAge",
