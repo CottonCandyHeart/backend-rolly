@@ -75,4 +75,6 @@ public class UserService {
         user.setHashedPasswd(passwordEncoder.encode(request.getNewPasswd()));
         userRepository.save(user);
     }
+
+    // TODO remove user
 }
