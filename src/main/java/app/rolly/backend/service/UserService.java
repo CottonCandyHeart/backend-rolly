@@ -1,6 +1,7 @@
 package app.rolly.backend.service;
 
 import app.rolly.backend.dto.*;
+import app.rolly.backend.exception.GlobalExceptionHandler;
 import app.rolly.backend.model.Role;
 import app.rolly.backend.model.User;
 import app.rolly.backend.repository.RoleRepository;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -76,5 +78,12 @@ public class UserService {
         userRepository.save(user);
     }
 
-    // TODO remove user
+    public boolean removeUser(Long id){
+        Optional<User> user = userRepository.findById(id);
+
+        if (user.isEmpty()) return false;
+
+        userRepository.removeUserById(id);
+        return true;
+    }
 }

@@ -2,7 +2,9 @@ package app.rolly.backend.controller;
 
 import app.rolly.backend.dto.ChangePasswordRequest;
 import app.rolly.backend.dto.UpdateUserDto;
+import app.rolly.backend.dto.UserDto;
 import app.rolly.backend.dto.UserResponseDto;
+import app.rolly.backend.exception.UserAlreadyExistsException;
 import app.rolly.backend.model.User;
 import app.rolly.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -45,4 +47,20 @@ public class UserController {
 
         return new ResponseEntity<>("Password updated", HttpStatus.OK);
     }
+
+    @PostMapping("/remove")
+    public ResponseEntity<?> removeUser(@RequestBody Long id, Authentication authentication){
+        User admin = (User)authentication.getPrincipal();
+
+        if (!admin.getRole().equals("admin")) {
+            return new ResponseEntity<>("Illegal role", HttpStatus.UNAUTHORIZED);
+        }
+
+        if (userService.removeUser(id)){
+            return new ResponseEntity<>("User doesn't exist", HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>("User removed", HttpStatus.OK);
+    }
+
 }

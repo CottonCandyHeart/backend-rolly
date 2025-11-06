@@ -13,10 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -159,5 +156,29 @@ public class UserServiceUnitTest {
         assertThrows(IllegalArgumentException.class,() -> {
             userService.changePassword(request, user);
         } );
+    }
+
+    @Test
+    void shouldRemoveExistingUser(){
+        // Given
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+
+        // When
+        boolean result = userService.removeUser(user.getId());
+
+        // Then
+        assertTrue(result);
+    }
+
+    @Test
+    void shouldReturnFalseForNonExistingUser(){
+        // Given
+        when(userRepository.findById(user.getId())).thenReturn(Optional.empty());
+
+        // When
+        boolean result = userService.removeUser(user.getId());
+
+        // Then
+        assertFalse(result);
     }
 }
