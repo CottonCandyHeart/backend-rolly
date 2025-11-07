@@ -1,5 +1,6 @@
 package app.rolly.backend.model;
 
+import app.rolly.backend.dto.RoutePointDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,13 @@ public class RoutePoint {
     )
     private Long id;
 
+    public RoutePoint(RoutePointDto routePointDto){
+        this.latitude = routePointDto.getLatitude();
+        this.longitude = routePointDto.getLongitude();
+        this.timestamp = routePointDto.getTimestamp();
+    }
+
+    @Column(nullable = false)
     private double latitude;
     private double longitude;
     private LocalDateTime timestamp;

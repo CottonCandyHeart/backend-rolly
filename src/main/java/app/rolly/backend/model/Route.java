@@ -1,13 +1,18 @@
 package app.rolly.backend.model;
 
+import app.rolly.backend.dto.RouteDto;
+import app.rolly.backend.repository.UserRepository;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @NoArgsConstructor
@@ -29,6 +34,17 @@ public class Route {
         this.distance = distance;
         this.estimatedTime = estimatedTime;
         this.createdBy = createdBy;
+        this.date = LocalDate.now();
+    }
+
+    public Route(RouteDto routeDto, User createdBy){
+        this.name = routeDto.getName();
+        this.distance = routeDto.getDistance();
+        this.estimatedTime = routeDto.getEstimatedTime();
+        this.createdBy = createdBy;
+        this.date = routeDto.getDate();
+        this.points = routeDto.getPoints().stream().map(RoutePoint::new).toList();
+        this.photos = routeDto.getPhotos().stream().map(RoutePhoto::new).toList();
     }
 
     @Column(nullable = false)
@@ -37,6 +53,8 @@ public class Route {
     private double distance;         // kilometers
     @Column(nullable = false)
     private Duration estimatedTime;
+    @Column
+    private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
