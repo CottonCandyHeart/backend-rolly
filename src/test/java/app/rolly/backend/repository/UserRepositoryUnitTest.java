@@ -204,14 +204,12 @@ public class UserRepositoryUnitTest {
                 "testTitle",
                 "testMessage",
                 LocalDateTime.of(2025, 1, 1, 0, 0, 0),
-                false,
                 user
         );
         Notification notification2 = new Notification(
                 "testTitle",
                 "testMessage",
                 LocalDateTime.of(2025, 1, 1, 0, 0, 0),
-                false,
                 user
         );
 

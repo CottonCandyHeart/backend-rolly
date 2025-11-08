@@ -51,7 +51,6 @@ public class NotificationRepositoryUnitTest {
                 "testTitle",
                 "testMessage",
                 sentAt,
-                false,
                 user
         );
         savedNotification = notificationRepository.save(notification);

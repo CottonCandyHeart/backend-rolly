@@ -1,5 +1,6 @@
 package app.rolly.backend.model;
 
+import app.rolly.backend.dto.NotificationDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,12 +23,20 @@ public class Notification {
     )
     private Long id;
 
-    public Notification(String title, String message, LocalDateTime sentAt, boolean read, User recipient){
+    public Notification(String title, String message, LocalDateTime sentAt, User recipient){
         this.title = title;
         this.message = message;
         this.sentAt = sentAt;
-        this.read = read;
+        this.read = false;
         this.recipient = recipient;
+    }
+
+    public Notification(NotificationDto notificationDto, User user){
+        this.title = notificationDto.getTitle();
+        this.message = notificationDto.getMessage();
+        this.sentAt = notificationDto.getSentAt();
+        this.read = false;
+        this.recipient = user;
     }
 
     @Column(nullable = false)
