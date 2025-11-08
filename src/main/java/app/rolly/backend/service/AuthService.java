@@ -24,11 +24,4 @@ public class AuthService {
         );
     }
 
-    public boolean login(String username, String passwd){
-        User user = userRepository.findByUsername(username);
-        if (user == null) return false;
-
-        return (passwordEncoder.matches(passwd, user.getHashedPasswd()));
-    }
-
 }
