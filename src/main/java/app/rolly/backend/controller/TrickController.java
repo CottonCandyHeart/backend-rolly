@@ -16,8 +16,14 @@ public class TrickController {
     private TrickService trickService;
 
     @GetMapping("/{name}")
-    public ResponseEntity<?> getTrick(@PathVariable String name){
-        return new ResponseEntity<>(trickService.getTrick(name), HttpStatus.OK);
+    public ResponseEntity<?> getTrick(@PathVariable String name, Authentication authentication){
+        User user = (User) authentication.getPrincipal();
+        try {
+            return new ResponseEntity<>(trickService.getTrick(name, user.getUserProgress()), HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>("Failed: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @PostMapping("/{name}")
@@ -30,6 +36,11 @@ public class TrickController {
     @GetMapping("/{category}")
     public ResponseEntity<?> getTrickByCategoryName(@PathVariable String category, Authentication authentication){
         User user = (User) authentication.getPrincipal();
-        return new ResponseEntity<>(trickService.getTricksByCategory(category, user.getUserProgress()), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(trickService.getTricksByCategory(category, user.getUserProgress()), HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>("Failed: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
     }
 }

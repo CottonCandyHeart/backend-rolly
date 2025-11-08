@@ -18,6 +18,7 @@ public class UserProgressService {
 
     public void updateStats(UserProgressDto userProgressDto, User user){
         UserProgress userProgress = user.getUserProgress();
+
         userProgress.setTotalDistance(userProgressDto.getTotalDistance());
         userProgress.setTotalSessions(userProgressDto.getTotalSessions());
         userProgress.setTotalTricksLearned(userProgressDto.getTotalTricksLearned());

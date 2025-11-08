@@ -11,6 +11,7 @@ import app.rolly.backend.repository.UserProgressRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,29 +22,31 @@ public class TrickService {
     private final UserProgressRepository userProgressRepository;
     private final CategoryRepository categoryRepository;
 
-    public TrickDto getTrick(String trickName){
+    public TrickDto getTrick(String trickName, UserProgress userProgress){
         Trick trick = trickRepository.findByName(trickName);
 
-        TrickDto trickDto = new TrickDto();
-        trickDto.setTrickName(trick.getName());
-        trickDto.setCategoryName(trick.getCategory().getName());
-        trickDto.setDescription(trick.getDescription());
-        trickDto.setLink(trick.getLink());
-        trickDto.setLeg(trick.getLeg());
+        if (trick == null) throw new RuntimeException("Trick not found");
 
-        return trickDto;
+        return new TrickDto(trick, userProgress);
     }
 
     public List<TrickDto> getTricksByCategory(String categoryName, UserProgress userProgress){
         Category category = categoryRepository.findByName(categoryName);
 
-        return trickRepository.findTricksByCategory_Name(category.getName()).stream()
+        if (category == null) throw new RuntimeException("Category not found");
+
+        List<Trick> tricks = trickRepository.findTricksByCategory_Name(category.getName());
+        if (tricks == null) tricks = new ArrayList<>();
+
+        return tricks.stream()
                 .map(trick -> new TrickDto(trick, userProgress))
                 .toList();
     }
 
     public void setTrickAsMastered(String trickName, UserProgress userProgress){
         Trick trick = trickRepository.findByName(trickName);
+
+        if (trick == null) throw new RuntimeException("Trick not found");
 
         if (!userProgress.getMasteredTricks().contains(trick)){
             userProgress.getMasteredTricks().add(trick);

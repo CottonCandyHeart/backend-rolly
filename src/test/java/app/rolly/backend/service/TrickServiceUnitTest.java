@@ -27,6 +27,7 @@ public class TrickServiceUnitTest {
     private CategoryRepository categoryRepository;
     @Mock
     private UserProgressRepository userProgressRepository;
+
     @InjectMocks
     private TrickService trickService;
 
@@ -76,7 +77,7 @@ public class TrickServiceUnitTest {
         when(trickRepository.findByName("testTrick")).thenReturn(trick);
 
         // When
-        TrickDto trickDto = trickService.getTrick("testTrick");
+        TrickDto trickDto = trickService.getTrick("testTrick", userProgress);
 
         // Then
         assertNotNull(trickDto);
@@ -85,6 +86,18 @@ public class TrickServiceUnitTest {
         assertEquals(trick.getLink(), trickDto.getLink());
         assertEquals(trick.getLeg(), trickDto.getLeg());
         assertEquals(trick.getDescription(), trickDto.getDescription());
+    }
+
+    @Test
+    void shouldThrowExceptionForNonExistingTrick(){
+        // Given
+        when(trickRepository.findByName("wrongTrick")).thenReturn(null);
+
+        // When
+        // Then
+        assertThrows(RuntimeException.class, ()->{
+            trickService.getTrick("wrongTrick", userProgress);
+        });
     }
 
     @Test
@@ -113,6 +126,31 @@ public class TrickServiceUnitTest {
     }
 
     @Test
+    void shouldReturnEmptyTrickListForCategory(){
+        // Given
+        when(trickRepository.findTricksByCategory_Name("testCategory")).thenReturn(null);
+        when(categoryRepository.findByName("testCategory")).thenReturn(category);
+
+        // When
+        List<TrickDto> tricks = trickService.getTricksByCategory("testCategory", userProgress);
+
+        // Then
+        assertEquals(0, tricks.size());
+    }
+
+    @Test
+    void shouldThrowExceptionForNonExistingCategory(){
+        // Given
+        when(categoryRepository.findByName("wrongCategory")).thenReturn(null);
+
+        // When
+        // Then
+        assertThrows(RuntimeException.class, ()->{
+            trickService.getTricksByCategory("wrongCategory", userProgress);
+        });
+    }
+
+    @Test
     void shouldSetTrickAsMastered(){
         // Given
         Trick trick2 = new Trick(
@@ -129,6 +167,18 @@ public class TrickServiceUnitTest {
 
         // Then
         assertTrue(userProgress.getMasteredTricks().contains(trick2));
+    }
+
+    @Test
+    void shouldThrowExceptionForNonExistingTrickWhileMarkedAsMastered(){
+        // Given
+        when(trickRepository.findByName("wrongTrick")).thenReturn(null);
+
+        // When
+        // Then
+        assertThrows(RuntimeException.class, ()->{
+            trickService.setTrickAsMastered("wrongTrick", userProgress);
+        });
     }
 
 

@@ -1,5 +1,6 @@
 package app.rolly.backend.model;
 
+import app.rolly.backend.dto.UserProgressDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
