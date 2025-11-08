@@ -3,14 +3,18 @@ package app.rolly.backend.controller;
 import app.rolly.backend.dto.*;
 import app.rolly.backend.exception.UserAlreadyExistsException;
 import app.rolly.backend.model.User;
+import app.rolly.backend.service.AchievementService;
 import app.rolly.backend.service.UserProgressService;
 import app.rolly.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/user")

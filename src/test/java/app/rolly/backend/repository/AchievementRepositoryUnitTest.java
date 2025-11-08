@@ -28,7 +28,7 @@ public class AchievementRepositoryUnitTest {
 
     @BeforeEach
     void set(){
-        achievement = new Achievement("testName", "lorem ipsum", "testPath");
+        achievement = new Achievement("testName", "testType", "lorem ipsum", "testPath", 0.0, 0, 0, 0);
         savedAchievement = achievementRepository.save(achievement);
     }
 

@@ -162,8 +162,8 @@ public class UserRepositoryUnitTest {
     @Test
     void shouldFindAttachedAchievements(){
         // Given
-        Achievement achievement1 = new Achievement("test1Name", "lorem ipsum 1", "test1Path");
-        Achievement achievement2 = new Achievement("test2Name", "lorem ipsum 2", "test2Path");
+        Achievement achievement1 = new Achievement("test1Name", "testType", "lorem ipsum 1", "test1Path", 0.0, 0, 0, 0);
+        Achievement achievement2 = new Achievement("test2Name", "testType", "lorem ipsum 2", "test2Path", 0.0, 0, 0, 0);
 
         user.getAchievements().add(achievement1);
         user.getAchievements().add(achievement2);

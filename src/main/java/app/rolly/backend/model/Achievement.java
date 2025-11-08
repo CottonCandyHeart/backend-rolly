@@ -23,18 +23,39 @@ public class Achievement {
     )
     private Long id;
 
-    public Achievement(String name, String description, String picturePath){
+    public Achievement(
+            String name, String type, String description, String picturePath,
+            double requiredDistance, int requiredSessionsCount, int requiredTricksLearnedCount,
+            int requiredCaloriesBurned
+    ){
         this.name = name;
+        this.type = type;
         this.description = description;
         this.picturePath = picturePath;
+
+        this.requiredDistance = requiredDistance;
+        this.requiredSessionsCount = requiredSessionsCount;
+        this.requiredTricksLearnedCount = requiredTricksLearnedCount;
+        this.requiredCaloriesBurned = requiredCaloriesBurned;
     }
 
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
+    private String type;
+    @Column(nullable = false)
     private String description;
     @Column(nullable = false)
     private String picturePath;
+
+    @Column(nullable = false)
+    private double requiredDistance;
+    @Column(nullable = false)
+    private int requiredSessionsCount;
+    @Column(nullable = false)
+    private int requiredTricksLearnedCount;
+    @Column(nullable = false)
+    private int requiredCaloriesBurned;
 
     @ManyToMany(mappedBy = "achievements")
     private Set<User> users = new HashSet<>();
