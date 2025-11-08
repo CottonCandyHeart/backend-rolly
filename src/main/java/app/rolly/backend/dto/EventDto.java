@@ -18,6 +18,7 @@ public class EventDto {
     private String age;
     private int numberOfParticipants;
     private String locationName;
+    private String action = null;
 
     public EventDto(Event event){
         this.organizerUsername = event.getOrganizer().getUsername();
@@ -27,5 +28,16 @@ public class EventDto {
         this.age = event.getAge();
         this.numberOfParticipants = event.getNumOfParticipants();
         this.locationName = event.getLocation().getName();
+    }
+
+    public EventDto(Event event, String action){
+        this.organizerUsername = event.getOrganizer().getUsername();
+        this.date = event.getDate();
+        this.time = event.getTime();
+        this.level = event.getLevel();
+        this.age = event.getAge();
+        this.numberOfParticipants = event.getNumOfParticipants();
+        this.locationName = event.getLocation().getName();
+        this.action = action;
     }
 }

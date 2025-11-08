@@ -20,17 +20,16 @@ public class TrickController {
         return new ResponseEntity<>(trickService.getTrick(name), HttpStatus.OK);
     }
 
-    @GetMapping("/{category}")
-    public ResponseEntity<?> getTrickByCategoryName(@PathVariable String category, Authentication authentication){
-        User user = (User) authentication.getPrincipal();
-        return new ResponseEntity<>(trickService.getTricksByCategory(category, user.getUserProgress()), HttpStatus.OK);
-    }
-
-    @PostMapping("/trick-mastered/{name}")
+    @PostMapping("/{name}")
     public ResponseEntity<?> setTrickAsMastered(@PathVariable String name, Authentication authentication){
         User user = (User) authentication.getPrincipal();
         trickService.setTrickAsMastered(name, user.getUserProgress());
         return new ResponseEntity<>("Trick set as mastered", HttpStatus.OK);
     }
 
+    @GetMapping("/{category}")
+    public ResponseEntity<?> getTrickByCategoryName(@PathVariable String category, Authentication authentication){
+        User user = (User) authentication.getPrincipal();
+        return new ResponseEntity<>(trickService.getTricksByCategory(category, user.getUserProgress()), HttpStatus.OK);
+    }
 }

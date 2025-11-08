@@ -29,12 +29,13 @@ public class Route {
     )
     private Long id;
 
-    public Route(String name, double distance, Duration estimatedTime, User createdBy){
+    public Route(String name, double distance, Duration estimatedTime, User createdBy, int caloriesBurned){
         this.name = name;
         this.distance = distance;
         this.estimatedTime = estimatedTime;
         this.createdBy = createdBy;
         this.date = LocalDate.now();
+        this.caloriesBurned = caloriesBurned;
     }
 
     public Route(RouteDto routeDto, User createdBy){
@@ -45,6 +46,7 @@ public class Route {
         this.date = routeDto.getDate();
         this.points = routeDto.getPoints().stream().map(RoutePoint::new).toList();
         this.photos = routeDto.getPhotos().stream().map(RoutePhoto::new).toList();
+        this.caloriesBurned = routeDto.getCaloriesBurned();
     }
 
     @Column(nullable = false)
@@ -55,6 +57,8 @@ public class Route {
     private Duration estimatedTime;
     @Column
     private LocalDate date;
+
+    private int caloriesBurned = 0;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

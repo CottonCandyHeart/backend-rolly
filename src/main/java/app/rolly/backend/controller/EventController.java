@@ -18,34 +18,34 @@ import java.util.NoSuchElementException;
 public class EventController {
     private final EventService eventService;
 
-    @PostMapping("/create-event")
-    public ResponseEntity<?> createEvent(@RequestBody EventDto eventDto){
-        if (eventService.createEvent(eventDto)) {
-            return new ResponseEntity<>("Event created", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Failed creating event", HttpStatus.BAD_REQUEST);
+    @PostMapping("/event")
+    public ResponseEntity<?> createEvent(@RequestBody EventDto eventDto, Authentication authentication){
+
+        if (eventDto.getAction().equals("create")){
+            if (eventService.createEvent(eventDto)) {
+                return new ResponseEntity<>("Event created", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Failed creating event", HttpStatus.BAD_REQUEST);
+            }
+        } else if (eventDto.getAction().equals("join")){
+            if (eventService.joinEvent(eventDto, (User) authentication.getPrincipal())) {
+                return new ResponseEntity<>("Joined event", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Failed joining event", HttpStatus.BAD_REQUEST);
+            }
+        } else if (eventDto.getAction().equals("leave")) {
+            if (eventService.leaveEvent(eventDto, (User) authentication.getPrincipal())) {
+                return new ResponseEntity<>("Left event", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Failed leaving event", HttpStatus.BAD_REQUEST);
+            }
         }
+
+        return new ResponseEntity<>("Action undefined", HttpStatus.BAD_REQUEST);
+
     }
 
-    @PostMapping("/join-event")
-    public ResponseEntity<?> joinEvent(@RequestBody EventDto eventDto, Authentication authentication){
-        if (eventService.joinEvent(eventDto, (User) authentication.getPrincipal())) {
-            return new ResponseEntity<>("Joined event", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Failed joining event", HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @PostMapping("/leave-event")
-    public ResponseEntity<?> leaveEvent(@RequestBody EventDto eventDto, Authentication authentication){
-        if (eventService.leaveEvent(eventDto, (User) authentication.getPrincipal())) {
-            return new ResponseEntity<>("Left event", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Failed leaving event", HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @GetMapping("/num-of-part")
+    @GetMapping("/participants")
     public ResponseEntity<?> showNumberOfParticipants(EventDto eventDto){
         return new ResponseEntity<>(eventService.getNumberOfParticipants(eventDto), HttpStatus.OK);
     }

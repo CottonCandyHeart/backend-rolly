@@ -46,7 +46,8 @@ public class RouteServiceUnitTest {
                 "testRoute",
                 0.0,
                 Duration.ofHours(1),
-                user
+                user,
+                150
         );
         route.setDate(LocalDate.of(2025,1,1));
     }
@@ -58,7 +59,8 @@ public class RouteServiceUnitTest {
                 "testRoute2",
                 2.2,
                 Duration.ofHours(2),
-                user
+                user,
+                150
         );
         route2.setDate(LocalDate.of(2025,2,2));
         when(routeRepository.getRouteByCreatedBy(user)).thenReturn(List.of(route, route2));
@@ -90,7 +92,8 @@ public class RouteServiceUnitTest {
                 "testRoute2",
                 2.2,
                 Duration.ofHours(2),
-                user
+                user,
+                150
         );
         route2.setDate(LocalDate.of(2025,2,2));
         when(

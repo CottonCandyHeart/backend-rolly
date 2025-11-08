@@ -252,13 +252,15 @@ public class UserRepositoryUnitTest {
                 "test1Name",
                 1.5,
                 Duration.ofMinutes(50),
-                user
+                user,
+                150
         );
         Route route2 = new Route(
                 "test2Name",
                 2.5,
                 Duration.ofMinutes(100),
-                user
+                user,
+                250
         );
 
         user.getRoutesCreated().add(route1);

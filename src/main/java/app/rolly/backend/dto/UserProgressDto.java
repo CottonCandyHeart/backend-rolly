@@ -19,8 +19,10 @@ public class UserProgressDto {
     private int caloriesBurned;
     private LocalDateTime lastUpdated;
     private String username;
+    private Long id;
 
     public UserProgressDto(UserProgress userProgress){
+        this.id = userProgress.getId();
         this.totalDistance = userProgress.getTotalDistance();
         this.totalSessions = userProgress.getTotalSessions();
         this.totalTricksLearned = userProgress.getTotalTricksLearned();

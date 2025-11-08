@@ -42,7 +42,7 @@ public class UserProgress {
     @Column(nullable = false)
     private int caloriesBurned;
     @Column(nullable = false)
-    private LocalDateTime lastUpdated;
+    private LocalDateTime lastUpdated = LocalDateTime.now();
 
     @OneToOne(mappedBy = "userProgress", cascade = CascadeType.ALL, orphanRemoval = true)
     private User user;

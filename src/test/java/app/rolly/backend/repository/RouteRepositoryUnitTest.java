@@ -51,7 +51,8 @@ public class RouteRepositoryUnitTest {
                 "testName",
                 1.5,
                 duration,
-                user
+                user,
+                150
         );
 
         savedRoute = routeRepository.save(route);

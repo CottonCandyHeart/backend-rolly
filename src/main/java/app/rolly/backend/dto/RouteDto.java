@@ -21,6 +21,7 @@ public class RouteDto {
     private LocalDate date;
     private List<RoutePointDto> points;
     private List<RoutePhotoDto> photos;
+    private int caloriesBurned;
 
     public RouteDto(Route route) {
         this.name = route.getName();
@@ -30,6 +31,7 @@ public class RouteDto {
         this.date = route.getDate();
         this.points = route.getPoints().stream().map(RoutePointDto::new).toList();
         this.photos = route.getPhotos().stream().map(RoutePhotoDto::new).toList();
+        this.caloriesBurned = route.getCaloriesBurned();
 
     }
 }

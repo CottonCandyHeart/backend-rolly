@@ -1,11 +1,9 @@
 package app.rolly.backend.controller;
 
-import app.rolly.backend.dto.ChangePasswordRequest;
-import app.rolly.backend.dto.UpdateUserDto;
-import app.rolly.backend.dto.UserDto;
-import app.rolly.backend.dto.UserResponseDto;
+import app.rolly.backend.dto.*;
 import app.rolly.backend.exception.UserAlreadyExistsException;
 import app.rolly.backend.model.User;
+import app.rolly.backend.service.UserProgressService;
 import app.rolly.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final UserProgressService userProgressService;
 
     @GetMapping("/profile")
     public ResponseEntity<?> getProfile(Authentication authentication){
@@ -27,7 +26,7 @@ public class UserController {
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
 
-    @PostMapping("/update-profile")
+    @PostMapping("/profile")
     public ResponseEntity<?> updateProfile(@RequestBody UpdateUserDto updateUserDto, Authentication authentication){
         User user = (User) authentication.getPrincipal();
         userService.updateUserProfile(updateUserDto, user);
@@ -61,6 +60,20 @@ public class UserController {
         }
 
         return new ResponseEntity<>("User removed", HttpStatus.OK);
+    }
+
+    @GetMapping("/progress")
+    public ResponseEntity<?> getUserProgress(Authentication authentication){
+        return new ResponseEntity<>(
+                userProgressService.getUserProgress((User) authentication.getPrincipal()),
+                HttpStatus.OK
+        );
+    }
+
+    @PostMapping("/progress")
+    public ResponseEntity<?> updateUserProgress(@RequestBody UserProgressDto userProgressDto, Authentication authentication){
+        userProgressService.updateStats(userProgressDto, (User) authentication.getPrincipal());
+        return new ResponseEntity<>("User Progress updated", HttpStatus.OK);
     }
 
 }
