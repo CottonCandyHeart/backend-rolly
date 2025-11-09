@@ -34,6 +34,7 @@ public class Event {
         this.age = age;
         this.numOfParticipants = numOfParticipants;
         this.location = location;
+        this.city = this.location.getCity();
 
     }
 
@@ -49,6 +50,8 @@ public class Event {
     private String age;
     @Column(nullable = false)
     private int numOfParticipants;
+    @Column(nullable = false)
+    private String city;
 
     @ManyToOne
     @JoinColumn(name = "organizer_id", nullable = false)
@@ -61,11 +64,4 @@ public class Event {
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 
-
-    public String getCity(){
-        return location.getCity();
-    }
-    public void setCity(String city){
-        location.setCity(city);
-    }
 }

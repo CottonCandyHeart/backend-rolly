@@ -47,6 +47,6 @@ public class UserProgress {
 
     @OneToOne(mappedBy = "userProgress", cascade = CascadeType.ALL, orphanRemoval = true)
     private User user;
-    @ManyToMany(mappedBy = "masteredTricks")
+    @ManyToMany(mappedBy = "userProgresses")
     Set<Trick> masteredTricks = new HashSet<>();
 }
