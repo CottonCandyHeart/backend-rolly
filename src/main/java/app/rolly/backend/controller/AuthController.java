@@ -3,6 +3,7 @@ package app.rolly.backend.controller;
 import app.rolly.backend.auth.JwtUtils;
 import app.rolly.backend.dto.LoginRequest;
 import app.rolly.backend.dto.UserDto;
+import app.rolly.backend.exception.UserAlreadyExistsException;
 import app.rolly.backend.model.Role;
 import app.rolly.backend.repository.RoleRepository;
 import app.rolly.backend.service.AuthService;
@@ -31,31 +32,24 @@ public class AuthController {
     public ResponseEntity<?> register(@RequestBody UserDto userDto){
         Role role = roleRepository.findByName(userDto.getRole());
 
-        try {
-            authService.registerUser(
-                    userDto.getUsername(),
-                    userDto.getEmail(),
-                    userDto.getPasswd(),
-                    userDto.getBirthday(),
-                    role
-            );
-        } catch (IllegalArgumentException e){
-            return new ResponseEntity<>("Cannot create user: " + e, HttpStatus.UNPROCESSABLE_ENTITY);
-        }
+        authService.registerUser(
+                userDto.getUsername(),
+                userDto.getEmail(),
+                userDto.getPasswd(),
+                userDto.getBirthday(),
+                role
+        );
+
         return new ResponseEntity<>("User created", HttpStatus.OK);
     }
 
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
-        try{
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPasswd())
-            );
-            String jwt = jwtUtils.generateJwtToken(authentication);
-            return new ResponseEntity<>(Map.of("token", jwt), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
-        }
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPasswd()));
+
+        String jwt = jwtUtils.generateJwtToken(authentication);
+        return new ResponseEntity<>(Map.of("token", jwt), HttpStatus.OK);
 
     }
 }

@@ -33,15 +33,10 @@ public class AchievementController {
 
     @PostMapping("/add/{achId}")
     public ResponseEntity<?> addAchievementToUser(@PathVariable Long achId, Authentication authentication){
-        boolean result;
-        try{
-            result = achievementService.addAchievementToUser(
-                    (User) authentication.getPrincipal(),
-                    achId
-            );
-        } catch (RuntimeException e){
-            return new ResponseEntity<>("Failed: " + e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        boolean result = achievementService.addAchievementToUser(
+                (User) authentication.getPrincipal(),
+                achId
+        );
 
         if (!result) return new ResponseEntity<>("Failed: Achievement already added", HttpStatus.BAD_REQUEST);
 

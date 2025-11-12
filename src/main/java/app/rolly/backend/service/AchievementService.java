@@ -1,6 +1,7 @@
 package app.rolly.backend.service;
 
 import app.rolly.backend.dto.AchievementDto;
+import app.rolly.backend.exception.NotFoundException;
 import app.rolly.backend.model.Achievement;
 import app.rolly.backend.model.User;
 import app.rolly.backend.model.UserProgress;
@@ -19,10 +20,6 @@ public class AchievementService {
     private final AchievementRepository achievementRepository;
     private final UserRepository userRepository;
 
-    // TODO przydzielanie osiągnięć użytkownikom (np. „Pierwszy trening!”, „100 km razem!”).
-    //  if (user.getUserProgress().getTotalDistance() > 100)
-    //    awardAchievement(user, "100 km legend");
-
     public Set<AchievementDto> getUserAchievements(User user) {
         return user.getAchievements().stream()
                 .map(AchievementDto::new)
@@ -38,7 +35,7 @@ public class AchievementService {
     @Transactional
     public boolean addAchievementToUser(User user, Long achievementId){
         Achievement achievement = achievementRepository.findById(achievementId)
-                .orElseThrow(() -> new RuntimeException("Achievement not found"));
+                .orElseThrow(() -> new NotFoundException("Achievement"));
 
         if (user.getAchievements().contains(achievement)) {
             return false;
@@ -52,7 +49,7 @@ public class AchievementService {
     @Transactional
     public boolean removeAchievementFromUser(User user, Long achievementId){
         Achievement achievement = achievementRepository.findById(achievementId)
-                .orElseThrow(() -> new RuntimeException("Achievement not found"));
+                .orElseThrow(() -> new NotFoundException("Achievement"));
 
         if (!user.getAchievements().contains(achievement)) {
             return false;

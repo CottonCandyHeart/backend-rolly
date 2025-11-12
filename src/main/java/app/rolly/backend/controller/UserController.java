@@ -41,12 +41,7 @@ public class UserController {
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request, Authentication authentication){
         User user = (User) authentication.getPrincipal();
 
-        try {
-            userService.changePassword(request, user);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>("Changing password failed: " + e.getMessage(), HttpStatus.UNAUTHORIZED);
-        }
-
+        userService.changePassword(request, user);
 
         return new ResponseEntity<>("Password updated", HttpStatus.OK);
     }
@@ -55,7 +50,7 @@ public class UserController {
     public ResponseEntity<?> removeUser(@RequestBody Long id, Authentication authentication){
         User admin = (User)authentication.getPrincipal();
 
-        if (!admin.getRole().equals("admin")) {
+        if (!admin.getRole().getName().equals("admin")) {
             return new ResponseEntity<>("Illegal role", HttpStatus.UNAUTHORIZED);
         }
 

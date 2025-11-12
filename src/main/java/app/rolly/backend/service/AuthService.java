@@ -1,5 +1,6 @@
 package app.rolly.backend.service;
 
+import app.rolly.backend.exception.UserAlreadyExistsException;
 import app.rolly.backend.model.Role;
 import app.rolly.backend.model.User;
 import app.rolly.backend.repository.UserRepository;
@@ -15,13 +16,11 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void registerUser(String username, String email, String passwd, LocalDate dateOfBirth, Role role){
+    public void registerUser(String username, String email, String passwd, LocalDate dateOfBirth, Role role) {
         if (userRepository.findByUsername(username) != null){
-            throw new IllegalArgumentException("Username already exists");
+            throw new UserAlreadyExistsException(username);
         }
-        userRepository.save(
-                new User(username, email, passwordEncoder.encode(passwd), dateOfBirth, role)
-        );
+        userRepository.save( new User(username, email, passwordEncoder.encode(passwd), dateOfBirth, role) );
     }
 
 }

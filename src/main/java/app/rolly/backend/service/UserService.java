@@ -2,6 +2,7 @@ package app.rolly.backend.service;
 
 import app.rolly.backend.dto.*;
 import app.rolly.backend.exception.GlobalExceptionHandler;
+import app.rolly.backend.exception.WrongPasswordException;
 import app.rolly.backend.model.Role;
 import app.rolly.backend.model.User;
 import app.rolly.backend.repository.RoleRepository;
@@ -71,7 +72,7 @@ public class UserService {
 
     public void changePassword(ChangePasswordRequest request, User user) {
         if (!passwordEncoder.matches(request.getCurrentPasswd(), user.getHashedPasswd())) {
-            throw new IllegalArgumentException("Wrong password");
+            throw new WrongPasswordException();
         }
 
         user.setHashedPasswd(passwordEncoder.encode(request.getNewPasswd()));

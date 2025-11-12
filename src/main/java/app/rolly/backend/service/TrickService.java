@@ -2,6 +2,8 @@ package app.rolly.backend.service;
 
 import app.rolly.backend.dto.CategoryDto;
 import app.rolly.backend.dto.TrickDto;
+import app.rolly.backend.exception.CategoryAlreadyExistsException;
+import app.rolly.backend.exception.NotFoundException;
 import app.rolly.backend.model.Category;
 import app.rolly.backend.model.Trick;
 import app.rolly.backend.model.User;
@@ -26,7 +28,7 @@ public class TrickService {
     public TrickDto getTrick(String trickName, UserProgress userProgress){
         Trick trick = trickRepository.findByName(trickName);
 
-        if (trick == null) throw new RuntimeException("Trick not found");
+        if (trick == null) throw new NotFoundException("Trick");
 
         return new TrickDto(trick, userProgress);
     }
@@ -34,7 +36,7 @@ public class TrickService {
     public List<TrickDto> getTricksByCategory(String categoryName, UserProgress userProgress){
         Category category = categoryRepository.findByName(categoryName);
 
-        if (category == null) throw new RuntimeException("Category not found");
+        if (category == null) throw new NotFoundException("Category");
 
         List<Trick> tricks = trickRepository.findTricksByCategory_Name(category.getName());
         if (tricks == null) tricks = new ArrayList<>();
@@ -47,7 +49,7 @@ public class TrickService {
     public void setTrickAsMastered(String trickName, UserProgress userProgress){
         Trick trick = trickRepository.findByName(trickName);
 
-        if (trick == null) throw new RuntimeException("Trick not found");
+        if (trick == null) throw new NotFoundException("Trick");
 
         if (!userProgress.getMasteredTricks().contains(trick)){
             userProgress.getMasteredTricks().add(trick);
@@ -63,7 +65,7 @@ public class TrickService {
 
     public boolean addCategory(String name){
         if (categoryRepository.existsByName(name)){
-            throw new RuntimeException("Category already exists");
+            throw new CategoryAlreadyExistsException(name);
         }
         Category category = new Category(name);
         categoryRepository.save(category);

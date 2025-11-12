@@ -19,12 +19,7 @@ public class TrickController {
     @GetMapping("/{name}")
     public ResponseEntity<?> getTrick(@PathVariable String name, Authentication authentication){
         User user = (User) authentication.getPrincipal();
-        try {
-            return new ResponseEntity<>(trickService.getTrick(name, user.getUserProgress()), HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>("Failed: " + e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-
+        return new ResponseEntity<>(trickService.getTrick(name, user.getUserProgress()), HttpStatus.OK);
     }
 
     @PostMapping("/{name}")
@@ -37,11 +32,7 @@ public class TrickController {
     @GetMapping("/{category}")
     public ResponseEntity<?> getTrickByCategoryName(@PathVariable String category, Authentication authentication){
         User user = (User) authentication.getPrincipal();
-        try {
-            return new ResponseEntity<>(trickService.getTricksByCategory(category, user.getUserProgress()), HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>("Failed: " + e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(trickService.getTricksByCategory(category, user.getUserProgress()), HttpStatus.OK);
     }
 
     @GetMapping("/categories")
@@ -51,11 +42,7 @@ public class TrickController {
 
     @PostMapping("/add-category")
     public ResponseEntity<?> addCategory(@RequestBody CategoryDto categoryDto){
-        try {
-            trickService.addCategory(categoryDto.getName());
-            return new ResponseEntity<>("Category added successfully", HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>("Failed: " + e, HttpStatus.BAD_REQUEST);
-        }
+        trickService.addCategory(categoryDto.getName());
+        return new ResponseEntity<>("Category added successfully", HttpStatus.OK);
     }
 }
