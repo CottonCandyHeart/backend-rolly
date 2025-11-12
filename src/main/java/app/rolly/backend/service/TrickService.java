@@ -1,5 +1,6 @@
 package app.rolly.backend.service;
 
+import app.rolly.backend.dto.CategoryDto;
 import app.rolly.backend.dto.TrickDto;
 import app.rolly.backend.model.Category;
 import app.rolly.backend.model.Trick;
@@ -52,5 +53,20 @@ public class TrickService {
             userProgress.getMasteredTricks().add(trick);
             userProgressRepository.save(userProgress);
         }
+    }
+
+    public List<CategoryDto> getCategories(){
+        return categoryRepository.findAll().stream()
+                .map(CategoryDto::new)
+                .toList();
+    }
+
+    public boolean addCategory(String name){
+        if (categoryRepository.existsByName(name)){
+            throw new RuntimeException("Category already exists");
+        }
+        Category category = new Category(name);
+        categoryRepository.save(category);
+        return true;
     }
 }

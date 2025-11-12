@@ -228,7 +228,7 @@ public class TrainingPlanServiceUnitTest {
     }
 
     @Test
-    void shouldReturnFalseForNonExistingTrainingPlan(){
+    void shouldReturnFalseFoRemovingNonExistingTrainingPlan(){
         // Given
         when(trainingPlanRepository.findById(trainingPlan.getId())).thenReturn(Optional.empty());
 
@@ -281,6 +281,18 @@ public class TrainingPlanServiceUnitTest {
     void shouldSReturnFalseWhenCompletedIsAlreadyFalse(){
         // Given
         when(trainingPlanRepository.findById(trainingPlan.getId())).thenReturn(Optional.of(trainingPlan));
+
+        // When
+        boolean result = trainingPlanService.markAsCompleted(trainingPlan.getId(), false);
+
+        // Then
+        assertFalse(result);
+    }
+
+    @Test
+    void shouldReturnFalseForMarkingNonExistingTrainingPlan(){
+        // Given
+        when(trainingPlanRepository.findById(trainingPlan.getId())).thenReturn(Optional.empty());
 
         // When
         boolean result = trainingPlanService.markAsCompleted(trainingPlan.getId(), false);

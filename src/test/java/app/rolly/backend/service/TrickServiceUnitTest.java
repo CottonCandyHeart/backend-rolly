@@ -1,5 +1,6 @@
 package app.rolly.backend.service;
 
+import app.rolly.backend.dto.CategoryDto;
 import app.rolly.backend.dto.TrickDto;
 import app.rolly.backend.model.*;
 import app.rolly.backend.repository.CategoryRepository;
@@ -181,5 +182,39 @@ public class TrickServiceUnitTest {
         });
     }
 
+    @Test
+    void shouldGetListOfCategoryDtos(){
+        // Given
+        when(categoryRepository.findAll()).thenReturn(List.of(category));
 
+        // When
+        List<CategoryDto> result = trickService.getCategories();
+
+        // Then
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void shouldAddCategory(){
+        // Given
+        when(categoryRepository.existsByName("cat2")).thenReturn(false);
+
+        // When
+        boolean result = trickService.addCategory("cat2");
+
+        // Then
+        assertTrue(result);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenCategoryAlreadyExists(){
+        // Given
+        when(categoryRepository.existsByName("testCategory")).thenReturn(true);
+
+        // When
+        // Then
+        assertThrows(RuntimeException.class, ()->{
+            trickService.addCategory("testCategory");
+        });
+    }
 }

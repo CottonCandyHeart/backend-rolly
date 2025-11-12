@@ -1,5 +1,6 @@
 package app.rolly.backend.controller;
 
+import app.rolly.backend.dto.CategoryDto;
 import app.rolly.backend.dto.TrickDto;
 import app.rolly.backend.model.User;
 import app.rolly.backend.service.TrickService;
@@ -41,6 +42,20 @@ public class TrickController {
         } catch (RuntimeException e) {
             return new ResponseEntity<>("Failed: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
 
+    @GetMapping("/categories")
+    public ResponseEntity<?> getCategories(){
+        return new ResponseEntity<>(trickService.getCategories(), HttpStatus.OK);
+    }
+
+    @PostMapping("/add-category")
+    public ResponseEntity<?> addCategory(@RequestBody CategoryDto categoryDto){
+        try {
+            trickService.addCategory(categoryDto.getName());
+            return new ResponseEntity<>("Category added successfully", HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>("Failed: " + e, HttpStatus.BAD_REQUEST);
+        }
     }
 }
