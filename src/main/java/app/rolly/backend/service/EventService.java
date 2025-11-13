@@ -8,7 +8,6 @@ import app.rolly.backend.repository.EventRepository;
 import app.rolly.backend.repository.LocationRepository;
 import app.rolly.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -21,7 +20,6 @@ public class EventService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final LocationRepository locationRepository;
-    private final UserDetailsPasswordService userDetailsPasswordService;
 
     public boolean createEvent(EventDto eventDto){
         User user = userRepository.findByUsername(eventDto.getOrganizerUsername());
