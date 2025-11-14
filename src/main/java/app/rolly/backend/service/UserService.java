@@ -9,6 +9,7 @@ import app.rolly.backend.model.User;
 import app.rolly.backend.repository.RoleRepository;
 import app.rolly.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -62,23 +63,26 @@ public class UserService {
         return userResponseDto;
     }
 
-    public void updateUserProfile(UpdateUserDto updateUserDto, User user){
-        user.setEmail(updateUserDto.getEmail());
+    public void updateUserProfile(UpdateUserDto updateUserDto, String username){
+        Optional<User> user = userRepository.findByUsername(username);
 
-        if (!user.getRole().getName().equals(updateUserDto.getRole())) {
-            Role role = roleRepository.findByName(updateUserDto.getRole());
-            user.setRole(role);
+        user.get().setEmail(updateUserDto.getEmail());
+
+        if (!user.get().getRole().getName().equals(updateUserDto.getRole())) {
+            Optional<Role> role = roleRepository.findByName(updateUserDto.getRole());
+            user.get().setRole(role.get());
         }
-        userRepository.save(user);
+        userRepository.save(user.get());
     }
 
-    public void changePassword(ChangePasswordRequest request, User user) {
-        if (!passwordEncoder.matches(request.getCurrentPasswd(), user.getHashedPasswd())) {
+    public void changePassword(ChangePasswordRequest request, String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (!passwordEncoder.matches(request.getCurrentPasswd(), user.get().getHashedPasswd())) {
             throw new WrongPasswordException();
         }
 
-        user.setHashedPasswd(passwordEncoder.encode(request.getNewPasswd()));
-        userRepository.save(user);
+        user.get().setHashedPasswd(passwordEncoder.encode(request.getNewPasswd()));
+        userRepository.save(user.get());
     }
 
     public boolean removeUser(Long id){
@@ -90,14 +94,16 @@ public class UserService {
         return true;
     }
 
-    public boolean updateMeasurements(UserMeasurementsDto userMeasurementsDto, User user){
-        user.setWeight(userMeasurementsDto.getWeight());
-        user.setHeight(userMeasurementsDto.getHeight());
+    public boolean updateMeasurements(UserMeasurementsDto userMeasurementsDto, String username){
+        Optional<User> user = userRepository.findByUsername(username);
+        user.get().setWeight(userMeasurementsDto.getWeight());
+        user.get().setHeight(userMeasurementsDto.getHeight());
 
         return true;
     }
 
-    public UserMeasurementsDto getMeasurements(User user){
-        return new UserMeasurementsDto(user.getWeight(), user.getHeight());
+    public UserMeasurementsDto getMeasurements(String username){
+        Optional<User> user = userRepository.findByUsername(username);
+        return new UserMeasurementsDto(user.get().getWeight(), user.get().getHeight());
     }
 }

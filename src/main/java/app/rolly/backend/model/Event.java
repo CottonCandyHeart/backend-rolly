@@ -17,12 +17,7 @@ import java.util.Set;
 @Table(name="event")
 public class Event {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "event_seq")
-    @SequenceGenerator(
-            name = "event_seq",
-            sequenceName = "event_sequence",
-            allocationSize = 1
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     public Event(User organizer, LocalDate date, LocalTime time, String level, String type, String age, int numOfParticipants, Location location){

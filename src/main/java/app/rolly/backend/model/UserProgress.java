@@ -17,12 +17,7 @@ import java.util.Set;
 @Table(name = "user_progress")
 public class UserProgress {
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "user_progress_seq")
-    @SequenceGenerator(
-            name = "user_progress_seq",
-            sequenceName = "user_progress_sequence",
-            allocationSize = 1
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     public UserProgress(double totalDistance, int totalSessions, int totalTricksLearned, int caloriesBurned, LocalDateTime lastUpdated, User user){

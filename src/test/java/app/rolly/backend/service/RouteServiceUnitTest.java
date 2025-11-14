@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -136,7 +137,7 @@ public class RouteServiceUnitTest {
     void shouldCreateRouteSuccessfully(){
         // Given
         RouteDto routeDto = new RouteDto(route);
-        when(userRepository.findByUsername("username")).thenReturn(user);
+        when(userRepository.findByUsername("username")).thenReturn(Optional.of(user));
 
         // When
         boolean result = routeService.createRoute(routeDto);

@@ -56,7 +56,7 @@ public class UserProgressServiceUnitTest {
         UserProgressDto expected = new UserProgressDto(userProgress);
 
         // When
-        UserProgressDto result = userProgressService.getUserProgress(user);
+        UserProgressDto result = userProgressService.getUserProgress(user.getUsername());
 
         // Then
         assertEquals(expected.getUsername(), result.getUsername());
@@ -83,7 +83,7 @@ public class UserProgressServiceUnitTest {
         UserProgressDto userProgressDto = new UserProgressDto(userProgress2);
 
         // When
-        userProgressService.updateStats(userProgressDto, user);
+        userProgressService.updateStats(userProgressDto, user.getUsername());
         UserProgress result = user.getUserProgress();
 
         // Then

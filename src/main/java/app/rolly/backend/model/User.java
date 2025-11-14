@@ -16,12 +16,7 @@ import java.util.Set;
 @Table(name="users")
 public class User {
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "user_seq")
-    @SequenceGenerator(
-            name = "user_seq",
-            sequenceName = "user_sequence",
-            allocationSize = 1
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     public User(String username, String email, String hashedPasswd, LocalDate dateOfBirth, Role role){

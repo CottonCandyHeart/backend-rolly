@@ -15,12 +15,7 @@ import java.time.LocalDateTime;
 @Table(name = "route_photo")
 public class RoutePhoto {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "route_seq")
-    @SequenceGenerator(
-            name = "route_seq",
-            sequenceName = "route_sequence",
-            allocationSize = 1
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     public RoutePhoto(RoutePhotoDto routePhotoDto){

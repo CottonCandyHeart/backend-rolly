@@ -21,12 +21,7 @@ import java.util.stream.Collectors;
 @Table(name="route")
 public class Route {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "route_seq")
-    @SequenceGenerator(
-            name = "route_seq",
-            sequenceName = "route_sequence",
-            allocationSize = 1
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     public Route(String name, double distance, Duration estimatedTime, User createdBy, int caloriesBurned){

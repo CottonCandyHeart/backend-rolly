@@ -15,12 +15,7 @@ import java.time.LocalDateTime;
 @Table(name="training-plan")
 public class TrainingPlan {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "training_plan_seq")
-    @SequenceGenerator(
-            name = "ttraining_plan_seq",
-            sequenceName = "training_plan_sequence",
-            allocationSize = 1
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     public TrainingPlan(LocalDateTime dateTime, int targetDuration, String notes, boolean completed, User user){

@@ -32,25 +32,22 @@ public class UserController {
 
     @PostMapping("/profile")
     public ResponseEntity<?> updateProfile(@RequestBody UpdateUserDto updateUserDto, Authentication authentication){
-        User user = (User) authentication.getPrincipal();
-        userService.updateUserProfile(updateUserDto, user);
+        userService.updateUserProfile(updateUserDto, authentication.getName());
         return new ResponseEntity<>("User updated", HttpStatus.OK);
     }
 
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request, Authentication authentication){
-        User user = (User) authentication.getPrincipal();
-
-        userService.changePassword(request, user);
+        userService.changePassword(request, authentication.getName());
 
         return new ResponseEntity<>("Password updated", HttpStatus.OK);
     }
 
     @PostMapping("/remove")
     public ResponseEntity<?> removeUser(@RequestBody Long id, Authentication authentication){
-        User admin = (User)authentication.getPrincipal();
+        String admin = authentication.getName();
 
-        if (!admin.getRole().getName().equals("admin")) {
+        if (!admin.equals("admin")) {
             return new ResponseEntity<>("Illegal role", HttpStatus.UNAUTHORIZED);
         }
 
@@ -64,25 +61,25 @@ public class UserController {
     @GetMapping("/progress")
     public ResponseEntity<?> getUserProgress(Authentication authentication){
         return new ResponseEntity<>(
-                userProgressService.getUserProgress((User) authentication.getPrincipal()),
+                userProgressService.getUserProgress(authentication.getName()),
                 HttpStatus.OK
         );
     }
 
     @PostMapping("/progress")
     public ResponseEntity<?> updateUserProgress(@RequestBody UserProgressDto userProgressDto, Authentication authentication){
-        userProgressService.updateStats(userProgressDto, (User) authentication.getPrincipal());
+        userProgressService.updateStats(userProgressDto, authentication.getName());
         return new ResponseEntity<>("User Progress updated", HttpStatus.OK);
     }
 
     @PostMapping("/meas")
     public ResponseEntity<?> updateMeasurements(@RequestBody UserMeasurementsDto userMeasurementsDto, Authentication authentication){
-        userService.updateMeasurements(userMeasurementsDto, (User) authentication.getPrincipal());
+        userService.updateMeasurements(userMeasurementsDto, authentication.getName());
         return new ResponseEntity<>("Measurements updated", HttpStatus.OK);
     }
 
     @GetMapping("/meas")
     public ResponseEntity<?> getMeasurements(Authentication authentication){
-        return new ResponseEntity<>(userService.getMeasurements((User) authentication.getPrincipal()), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getMeasurements(authentication.getName()), HttpStatus.OK);
     }
 }

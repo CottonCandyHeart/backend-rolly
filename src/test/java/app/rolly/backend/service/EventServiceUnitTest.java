@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -72,7 +73,7 @@ public class EventServiceUnitTest {
     void shouldCreateEventSuccessfully(){
         // Given
         EventDto eventDto = new EventDto(event);
-        when(userRepository.findByUsername("user")).thenReturn(user);
+        when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
         when(locationRepository.findByName("location")).thenReturn(location);
 
         // When
@@ -100,7 +101,7 @@ public class EventServiceUnitTest {
     void shouldReturnFalseForNonExistingLocationWhileCreatingEvent(){
         // Given
         EventDto eventDto = new EventDto(event);
-        when(userRepository.findByUsername("user")).thenReturn(user);
+        when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
         when(locationRepository.findByName("location")).thenReturn(null);
 
         // When
@@ -114,7 +115,7 @@ public class EventServiceUnitTest {
     void shouldJoinEventSuccessfully(){
         // Given
         EventDto eventDto = new EventDto(event);
-        when(userRepository.findByUsername("user")).thenReturn(user);
+        when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
         when(locationRepository.findByName("location")).thenReturn(location);
         when(eventRepository.findByOrganizerAndDateAndTimeAndLocation(
                 user,
@@ -143,7 +144,7 @@ public class EventServiceUnitTest {
             event.getAttendee().add(new User());
         }
 
-        when(userRepository.findByUsername("user")).thenReturn(user);
+        when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
         when(locationRepository.findByName("location")).thenReturn(location);
         when(eventRepository.findByOrganizerAndDateAndTimeAndLocation(
                 user,
@@ -176,7 +177,7 @@ public class EventServiceUnitTest {
         event.getAttendee().add(user1);
 
         EventDto eventDto = new EventDto(event);
-        when(userRepository.findByUsername("user")).thenReturn(user);
+        when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
         when(locationRepository.findByName("location")).thenReturn(location);
         when(eventRepository.findByOrganizerAndDateAndTimeAndLocation(
                 user,
@@ -210,7 +211,7 @@ public class EventServiceUnitTest {
         event.getAttendee().add(user1);
 
         EventDto eventDto = new EventDto(event);
-        when(userRepository.findByUsername("user")).thenReturn(user);
+        when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
         when(locationRepository.findByName("location")).thenReturn(location);
         when(eventRepository.findByOrganizerAndDateAndTimeAndLocation(
                 user,
@@ -242,7 +243,7 @@ public class EventServiceUnitTest {
         );
 
         EventDto eventDto = new EventDto(event);
-        when(userRepository.findByUsername("user")).thenReturn(user);
+        when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
         when(locationRepository.findByName("location")).thenReturn(location);
         when(eventRepository.findByOrganizerAndDateAndTimeAndLocation(
                 user,
@@ -283,7 +284,7 @@ public class EventServiceUnitTest {
         event.getAttendee().add(user2);
 
         EventDto eventDto = new EventDto(event);
-        when(userRepository.findByUsername("user")).thenReturn(user);
+        when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
         when(locationRepository.findByName("location")).thenReturn(location);
         when(eventRepository.findByOrganizerAndDateAndTimeAndLocation(
                 user,
@@ -303,7 +304,7 @@ public class EventServiceUnitTest {
     void shouldReturnZeroForEmptyParticipantsList(){
         // Given
         EventDto eventDto = new EventDto(event);
-        when(userRepository.findByUsername("user")).thenReturn(user);
+        when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
         when(locationRepository.findByName("location")).thenReturn(location);
         when(eventRepository.findByOrganizerAndDateAndTimeAndLocation(
                 user,

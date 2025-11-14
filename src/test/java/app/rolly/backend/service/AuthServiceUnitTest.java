@@ -1,5 +1,6 @@
 package app.rolly.backend.service;
 
+import app.rolly.backend.dto.UserDto;
 import app.rolly.backend.exception.UserAlreadyExistsException;
 import app.rolly.backend.model.Role;
 import app.rolly.backend.model.User;
@@ -13,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
@@ -33,13 +35,19 @@ public class AuthServiceUnitTest {
         User user = new User("username", "email", "passwd",
                 LocalDate.of(2000,1,1), new Role("role", "role"));
 
-        when(userRepository.findByUsername("username")).thenReturn(user);
+        UserDto userDto = new UserDto();
+        userDto.setUsername("username");
+        userDto.setPasswd("passwd");
+        userDto.setEmail("email");
+        userDto.setBirthday(LocalDate.of(2000,1,1));
+        userDto.setRole("role");
+
+        when(userRepository.findByUsername("username")).thenReturn(Optional.of(user));
 
         // When
         // Then
         assertThrows(UserAlreadyExistsException.class, ()->{
-            authService.registerUser("username", "email", "passwd",
-                    LocalDate.of(2000,1,1), new Role("role", "role"));
+            authService.registerUser(userDto);
         });
     }
 }

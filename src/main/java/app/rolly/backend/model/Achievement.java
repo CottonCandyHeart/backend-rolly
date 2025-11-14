@@ -15,12 +15,7 @@ import java.util.Set;
 @Table(name="achievement")
 public class Achievement {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "achievement_seq")
-    @SequenceGenerator(
-            name = "achievement_seq",
-            sequenceName = "achievement_sequence",
-            allocationSize = 1
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     public Achievement(

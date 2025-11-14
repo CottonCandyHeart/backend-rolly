@@ -15,12 +15,7 @@ import java.util.List;
 @Table(name="location")
 public class Location {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "location_seq")
-    @SequenceGenerator(
-            name = "location_seq",
-            sequenceName = "location_sequence",
-            allocationSize = 1
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     public Location(String name, String city, String country, double latitude, double longitude){

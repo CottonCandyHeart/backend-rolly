@@ -30,15 +30,9 @@ public class AuthController {
 
     @PostMapping(value="/reg")
     public ResponseEntity<?> register(@RequestBody UserDto userDto){
-        Role role = roleRepository.findByName(userDto.getRole());
+        //Role role = roleRepository.findByName(userDto.getRole());
 
-        authService.registerUser(
-                userDto.getUsername(),
-                userDto.getEmail(),
-                userDto.getPasswd(),
-                userDto.getBirthday(),
-                role
-        );
+        authService.registerUser(userDto);
 
         return new ResponseEntity<>("User created", HttpStatus.OK);
     }

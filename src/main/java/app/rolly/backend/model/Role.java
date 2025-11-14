@@ -15,12 +15,7 @@ import java.util.List;
 @Table(name="role")
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_seq")
-    @SequenceGenerator(
-            name = "role_seq",
-            sequenceName = "role_sequence",
-            allocationSize = 1
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     public Role(String name, String description){

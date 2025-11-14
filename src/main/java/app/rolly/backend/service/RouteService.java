@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -45,8 +46,8 @@ public class RouteService {
     }
 
     public boolean createRoute(RouteDto routeDto){
-        User user = userRepository.findByUsername(routeDto.getCreatedBy());
-        Route route = new Route(routeDto, user);
+        Optional<User> user = userRepository.findByUsername(routeDto.getCreatedBy());
+        Route route = new Route(routeDto, user.get());
         routeRepository.save(route);
         return true;
     }

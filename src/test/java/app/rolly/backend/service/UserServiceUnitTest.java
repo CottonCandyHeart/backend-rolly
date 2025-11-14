@@ -103,7 +103,7 @@ public class UserServiceUnitTest {
         updateUserDto.setRole(user.getRole().getName());
 
         // When
-        userService.updateUserProfile(updateUserDto, user);
+        userService.updateUserProfile(updateUserDto, user.getUsername());
 
         // Then
         assertEquals("updated@test", user.getEmail());
@@ -121,7 +121,7 @@ public class UserServiceUnitTest {
         updateUserDto.setEmail(user.getEmail());
 
         // When
-        userService.updateUserProfile(updateUserDto, user);
+        userService.updateUserProfile(updateUserDto, user.getUsername());
 
         // Then
         assertEquals(role2.getName(), user.getRole().getName());
@@ -139,7 +139,7 @@ public class UserServiceUnitTest {
         when(passwordEncoder.encode("newPassword")).thenReturn("encodedNewPassword");
 
         // When
-        userService.changePassword(request, user);
+        userService.changePassword(request, user.getUsername());
 
         // Then
         assertEquals("encodedNewPassword", user.getHashedPasswd());
@@ -155,7 +155,7 @@ public class UserServiceUnitTest {
         // When
         // Then
         assertThrows(WrongPasswordException.class,() -> {
-            userService.changePassword(request, user);
+            userService.changePassword(request, user.getUsername());
         } );
     }
 
@@ -189,7 +189,7 @@ public class UserServiceUnitTest {
         UserMeasurementsDto userMeasurementsDto = new UserMeasurementsDto(50.5, 160);
 
         // When
-        boolean result = userService.updateMeasurements(userMeasurementsDto, user);
+        boolean result = userService.updateMeasurements(userMeasurementsDto, user.getUsername());
 
         // Then
         assertTrue(result);
@@ -204,7 +204,7 @@ public class UserServiceUnitTest {
         user.setWeight(50.5);
 
         // When
-        UserMeasurementsDto measurementsDto = userService.getMeasurements(user);
+        UserMeasurementsDto measurementsDto = userService.getMeasurements(user.getUsername());
 
         // Then
         assertNotNull(measurementsDto);
@@ -217,7 +217,7 @@ public class UserServiceUnitTest {
         // Given
 
         // When
-        UserMeasurementsDto measurementsDto = userService.getMeasurements(user);
+        UserMeasurementsDto measurementsDto = userService.getMeasurements(user.getUsername());
         System.out.println(measurementsDto.getHeight());
 
         // Then

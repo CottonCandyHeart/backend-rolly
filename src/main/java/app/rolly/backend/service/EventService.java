@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,15 +23,15 @@ public class EventService {
     private final LocationRepository locationRepository;
 
     public boolean createEvent(EventDto eventDto){
-        User user = userRepository.findByUsername(eventDto.getOrganizerUsername());
+        Optional<User> user = userRepository.findByUsername(eventDto.getOrganizerUsername());
         Location location = locationRepository.findByName(eventDto.getLocationName());
 
-        if (user == null || location == null) {
+        if (user.isEmpty() || location == null) {
             return false;
         }
 
         Event event = new Event(
-                user,
+                user.get(),
                 eventDto.getDate(),
                 eventDto.getTime(),
                 eventDto.getLevel(),
@@ -46,11 +47,11 @@ public class EventService {
 
     public boolean joinEvent(EventDto eventDto, User user){
         Event event;
-        User organizer = userRepository.findByUsername(eventDto.getOrganizerUsername());
+        Optional<User> organizer = userRepository.findByUsername(eventDto.getOrganizerUsername());
         Location location = locationRepository.findByName(eventDto.getLocationName());
 
         event = eventRepository.findByOrganizerAndDateAndTimeAndLocation(
-                    organizer,
+                    organizer.get(),
                     eventDto.getDate(),
                     eventDto.getTime(),
                     location
@@ -70,11 +71,11 @@ public class EventService {
 
     public boolean leaveEvent(EventDto eventDto, User user){
         Event event;
-        User organizer = userRepository.findByUsername(eventDto.getOrganizerUsername());
+        Optional<User> organizer = userRepository.findByUsername(eventDto.getOrganizerUsername());
         Location location = locationRepository.findByName(eventDto.getLocationName());
 
         event = eventRepository.findByOrganizerAndDateAndTimeAndLocation(
-                organizer,
+                organizer.get(),
                 eventDto.getDate(),
                 eventDto.getTime(),
                 location
@@ -91,11 +92,11 @@ public class EventService {
 
     public int getNumberOfParticipants(EventDto eventDto){
         Event event;
-        User user = userRepository.findByUsername(eventDto.getOrganizerUsername());
+        Optional<User> user = userRepository.findByUsername(eventDto.getOrganizerUsername());
         Location location = locationRepository.findByName(eventDto.getLocationName());
 
         event = eventRepository.findByOrganizerAndDateAndTimeAndLocation(
-                user,
+                user.get(),
                 eventDto.getDate(),
                 eventDto.getTime(),
                 location

@@ -19,6 +19,7 @@ import org.springframework.security.core.Authentication;
 
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
@@ -61,13 +62,7 @@ public class AuthControllerUnitTest {
         assertEquals(200, response.getStatusCodeValue());
         assertEquals("User created", response.getBody());
         verify(authService)
-                .registerUser(
-                        eq("testUser"),
-                        eq("test@test.pl"),
-                        eq("testPasswd"),
-                        eq(LocalDate.of(2000,1,1)),
-                        eq(role)
-                );
+                .registerUser(userDto);
     }
 
     @Test
@@ -81,17 +76,11 @@ public class AuthControllerUnitTest {
         userDto.setRole("USER");
 
         Role role = new Role("USER", "lorem ipsum");
-        when(roleRepository.findByName("USER")).thenReturn(role);
+        when(roleRepository.findByName("USER")).thenReturn(Optional.of(role));
 
         doThrow(new IllegalArgumentException("Username already exists"))
                 .when(authService)
-                .registerUser(
-                        eq("testUser"),
-                        eq("test@test.pl"),
-                        eq("testPasswd"),
-                        eq(LocalDate.of(2000,1,1)),
-                        eq(role)
-                );
+                .registerUser(userDto);
 
         // When
         ResponseEntity<?> response = authController.register(userDto);

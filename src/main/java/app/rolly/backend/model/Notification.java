@@ -15,12 +15,7 @@ import java.time.LocalDateTime;
 @Table(name="notification")
 public class Notification {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notification_seq")
-    @SequenceGenerator(
-            name = "notification_seq",
-            sequenceName = "notification_sequence",
-            allocationSize = 1
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     public Notification(String title, String message, LocalDateTime sentAt, User recipient){
