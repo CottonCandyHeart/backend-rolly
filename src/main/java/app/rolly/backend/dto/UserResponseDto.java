@@ -18,6 +18,7 @@ public class UserResponseDto {
     private String email;
     private LocalDate birthday;
     private String role;
+    private String level;
 
     private List<EventDto> organizedEvents;
     private Set<EventDto> attendedEvents;

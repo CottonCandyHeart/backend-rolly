@@ -30,6 +30,7 @@ public class UserService {
         userResponseDto.setEmail(user.getEmail());
         userResponseDto.setBirthday(user.getDateOfBirth());
         userResponseDto.setRole(user.getRole().getName());
+        userResponseDto.setLevel(user.getUserLevel());
 
 
         List<EventDto> organizedEventsDtos = user.getOrganizedEvents().stream()

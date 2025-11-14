@@ -25,6 +25,9 @@ public class UserProgressService {
         userProgress.setCaloriesBurned(userProgressDto.getCaloriesBurned());
         userProgress.setLastUpdated(userProgressDto.getLastUpdated());
 
+        if (userProgress.getTotalTricksLearned() >= 80) user.setUserLevel("Advanced");
+        else if (userProgress.getTotalTricksLearned() >= 30) user.setUserLevel("Mid");
+
         userProgressRepository.save(userProgress);
         user.setUserProgress(userProgress);
     }
