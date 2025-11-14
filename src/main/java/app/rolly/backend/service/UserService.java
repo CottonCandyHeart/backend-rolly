@@ -2,6 +2,7 @@ package app.rolly.backend.service;
 
 import app.rolly.backend.dto.*;
 import app.rolly.backend.exception.GlobalExceptionHandler;
+import app.rolly.backend.exception.NotFoundException;
 import app.rolly.backend.exception.WrongPasswordException;
 import app.rolly.backend.model.Role;
 import app.rolly.backend.model.User;
@@ -86,5 +87,16 @@ public class UserService {
 
         userRepository.removeUserById(id);
         return true;
+    }
+
+    public boolean updateMeasurements(UserMeasurementsDto userMeasurementsDto, User user){
+        user.setWeight(userMeasurementsDto.getWeight());
+        user.setHeight(userMeasurementsDto.getHeight());
+
+        return true;
+    }
+
+    public UserMeasurementsDto getMeasurements(User user){
+        return new UserMeasurementsDto(user.getWeight(), user.getHeight());
     }
 }

@@ -30,6 +30,7 @@ public class User {
         this.hashedPasswd = hashedPasswd;
         this.dateOfBirth = dateOfBirth;
         this.role = role;
+        this.userLevel = "Beginner";
     }
 
     @Column(nullable = false, unique = true)
@@ -40,6 +41,11 @@ public class User {
     private String hashedPasswd;
     @Column(nullable = false)
     private LocalDate dateOfBirth;
+
+    private double weight;
+    private int height;          // cm
+
+    private String userLevel;
 
     @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Event> organizedEvents = new ArrayList<>();

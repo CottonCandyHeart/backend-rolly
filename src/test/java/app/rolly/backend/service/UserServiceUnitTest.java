@@ -1,6 +1,7 @@
 package app.rolly.backend.service;
 
 import app.rolly.backend.dto.*;
+import app.rolly.backend.exception.WrongPasswordException;
 import app.rolly.backend.model.*;
 import app.rolly.backend.repository.RoleRepository;
 import app.rolly.backend.repository.UserRepository;
@@ -153,7 +154,7 @@ public class UserServiceUnitTest {
 
         // When
         // Then
-        assertThrows(IllegalArgumentException.class,() -> {
+        assertThrows(WrongPasswordException.class,() -> {
             userService.changePassword(request, user);
         } );
     }
@@ -180,5 +181,47 @@ public class UserServiceUnitTest {
 
         // Then
         assertFalse(result);
+    }
+
+    @Test
+    void shouldUpdateUserMeasurements(){
+        // Given
+        UserMeasurementsDto userMeasurementsDto = new UserMeasurementsDto(50.5, 160);
+
+        // When
+        boolean result = userService.updateMeasurements(userMeasurementsDto, user);
+
+        // Then
+        assertTrue(result);
+        assertEquals(50.5, user.getWeight());
+        assertEquals(160, user.getHeight());
+    }
+
+    @Test
+    void shouldGetMeasurementsDto(){
+        // Given
+        user.setHeight(160);
+        user.setWeight(50.5);
+
+        // When
+        UserMeasurementsDto measurementsDto = userService.getMeasurements(user);
+
+        // Then
+        assertNotNull(measurementsDto);
+        assertEquals(160, measurementsDto.getHeight());
+        assertEquals(50.5, measurementsDto.getWeight());
+    }
+
+    @Test
+    void shouldReturnZeroWhenMeasurementsAreEmpty(){
+        // Given
+
+        // When
+        UserMeasurementsDto measurementsDto = userService.getMeasurements(user);
+        System.out.println(measurementsDto.getHeight());
+
+        // Then
+        assertEquals(0.0, measurementsDto.getWeight());
+        assertEquals(0, measurementsDto.getHeight());
     }
 }

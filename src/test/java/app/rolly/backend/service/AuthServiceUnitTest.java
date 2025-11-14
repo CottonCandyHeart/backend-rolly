@@ -1,5 +1,6 @@
 package app.rolly.backend.service;
 
+import app.rolly.backend.exception.UserAlreadyExistsException;
 import app.rolly.backend.model.Role;
 import app.rolly.backend.model.User;
 import app.rolly.backend.repository.UserRepository;
@@ -36,7 +37,7 @@ public class AuthServiceUnitTest {
 
         // When
         // Then
-        assertThrows(IllegalArgumentException.class, ()->{
+        assertThrows(UserAlreadyExistsException.class, ()->{
             authService.registerUser("username", "email", "passwd",
                     LocalDate.of(2000,1,1), new Role("role", "role"));
         });

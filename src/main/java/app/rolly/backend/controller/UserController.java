@@ -75,4 +75,14 @@ public class UserController {
         return new ResponseEntity<>("User Progress updated", HttpStatus.OK);
     }
 
+    @PostMapping("/meas")
+    public ResponseEntity<?> updateMeasurements(@RequestBody UserMeasurementsDto userMeasurementsDto, Authentication authentication){
+        userService.updateMeasurements(userMeasurementsDto, (User) authentication.getPrincipal());
+        return new ResponseEntity<>("Measurements updated", HttpStatus.OK);
+    }
+
+    @GetMapping("/meas")
+    public ResponseEntity<?> getMeasurements(Authentication authentication){
+        return new ResponseEntity<>(userService.getMeasurements((User) authentication.getPrincipal()), HttpStatus.OK);
+    }
 }
