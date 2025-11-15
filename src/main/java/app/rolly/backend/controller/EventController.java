@@ -28,13 +28,13 @@ public class EventController {
                 return new ResponseEntity<>("Failed creating event", HttpStatus.BAD_REQUEST);
             }
         } else if (eventDto.getAction().equals("join")){
-            if (eventService.joinEvent(eventDto, (User) authentication.getPrincipal())) {
+            if (eventService.joinEvent(eventDto, authentication.getName())) {
                 return new ResponseEntity<>("Joined event", HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("Failed joining event", HttpStatus.BAD_REQUEST);
             }
         } else if (eventDto.getAction().equals("leave")) {
-            if (eventService.leaveEvent(eventDto, (User) authentication.getPrincipal())) {
+            if (eventService.leaveEvent(eventDto, authentication.getName())) {
                 return new ResponseEntity<>("Left event", HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("Failed leaving event", HttpStatus.BAD_REQUEST);

@@ -20,7 +20,8 @@ public class AchievementService {
     private final AchievementRepository achievementRepository;
     private final UserRepository userRepository;
 
-    public Set<AchievementDto> getUserAchievements(User user) {
+    public Set<AchievementDto> getUserAchievements(String username) {
+        User user = userRepository.findByUsername(username).get();
         return user.getAchievements().stream()
                 .map(AchievementDto::new)
                 .collect(Collectors.toSet());
@@ -33,7 +34,8 @@ public class AchievementService {
     }
 
     @Transactional
-    public boolean addAchievementToUser(User user, Long achievementId){
+    public boolean addAchievementToUser(String username, Long achievementId){
+        User user = userRepository.findByUsername(username).get();
         Achievement achievement = achievementRepository.findById(achievementId)
                 .orElseThrow(() -> new NotFoundException("Achievement"));
 
@@ -47,7 +49,8 @@ public class AchievementService {
     }
 
     @Transactional
-    public boolean removeAchievementFromUser(User user, Long achievementId){
+    public boolean removeAchievementFromUser(String username, Long achievementId){
+        User user = userRepository.findByUsername(username).get();
         Achievement achievement = achievementRepository.findById(achievementId)
                 .orElseThrow(() -> new NotFoundException("Achievement"));
 

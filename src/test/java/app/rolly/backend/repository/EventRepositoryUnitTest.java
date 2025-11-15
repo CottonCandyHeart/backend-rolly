@@ -127,9 +127,9 @@ public class EventRepositoryUnitTest {
                 role
         );
         User user2 = new User(
-                "test1",
-                "test1@test1",
-                "test1Password",
+                "test2",
+                "test2@test2",
+                "test2Password",
                 date2,
                 role
         );

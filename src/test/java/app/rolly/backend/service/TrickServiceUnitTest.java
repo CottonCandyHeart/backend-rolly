@@ -6,6 +6,7 @@ import app.rolly.backend.model.*;
 import app.rolly.backend.repository.CategoryRepository;
 import app.rolly.backend.repository.TrickRepository;
 import app.rolly.backend.repository.UserProgressRepository;
+import app.rolly.backend.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -28,6 +30,8 @@ public class TrickServiceUnitTest {
     private CategoryRepository categoryRepository;
     @Mock
     private UserProgressRepository userProgressRepository;
+    @Mock
+    private UserRepository userRepository;
 
     @InjectMocks
     private TrickService trickService;
@@ -35,6 +39,7 @@ public class TrickServiceUnitTest {
     private Category category;
     private Trick trick;
     private UserProgress userProgress;
+    private User user;
 
     @BeforeEach
     void set(){
@@ -48,7 +53,7 @@ public class TrickServiceUnitTest {
                 "lorem ipsum"
         );
 
-        User user = new User(
+        user = new User(
                 "user",
                 "user@user",
                 "hashedPasswd",
@@ -68,6 +73,7 @@ public class TrickServiceUnitTest {
                 user
         );
 
+        user.setUserProgress(userProgress);
         trick.getUserProgresses().add(userProgress);
         userProgress.getMasteredTricks().add(trick);
     }
@@ -75,10 +81,11 @@ public class TrickServiceUnitTest {
     @Test
     void shouldReturnTrickDto(){
         // Given
-        when(trickRepository.findByName("testTrick")).thenReturn(trick);
+        when(trickRepository.findByName("testTrick")).thenReturn(Optional.of(trick));
+        when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
 
         // When
-        TrickDto trickDto = trickService.getTrick("testTrick", userProgress);
+        TrickDto trickDto = trickService.getTrick("testTrick", "user");
 
         // Then
         assertNotNull(trickDto);
@@ -92,12 +99,13 @@ public class TrickServiceUnitTest {
     @Test
     void shouldThrowExceptionForNonExistingTrick(){
         // Given
-        when(trickRepository.findByName("wrongTrick")).thenReturn(null);
+        when(trickRepository.findByName("wrongTrick")).thenReturn(Optional.empty());
+        when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
 
         // When
         // Then
         assertThrows(RuntimeException.class, ()->{
-            trickService.getTrick("wrongTrick", userProgress);
+            trickService.getTrick("wrongTrick", "user");
         });
     }
 
@@ -113,10 +121,11 @@ public class TrickServiceUnitTest {
         );
 
         when(trickRepository.findTricksByCategory_Name("testCategory")).thenReturn(List.of(trick, trick2));
-        when(categoryRepository.findByName("testCategory")).thenReturn(category);
+        when(categoryRepository.findByName("testCategory")).thenReturn(Optional.of(category));
+        when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
 
         // When
-        List<TrickDto> tricks = trickService.getTricksByCategory("testCategory", userProgress);
+        List<TrickDto> tricks = trickService.getTricksByCategory("testCategory", "user");
 
         // Then
         assertEquals(2, tricks.size());
@@ -130,10 +139,11 @@ public class TrickServiceUnitTest {
     void shouldReturnEmptyTrickListForCategory(){
         // Given
         when(trickRepository.findTricksByCategory_Name("testCategory")).thenReturn(null);
-        when(categoryRepository.findByName("testCategory")).thenReturn(category);
+        when(categoryRepository.findByName("testCategory")).thenReturn(Optional.of(category));
+        when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
 
         // When
-        List<TrickDto> tricks = trickService.getTricksByCategory("testCategory", userProgress);
+        List<TrickDto> tricks = trickService.getTricksByCategory("testCategory", "user");
 
         // Then
         assertEquals(0, tricks.size());
@@ -142,12 +152,13 @@ public class TrickServiceUnitTest {
     @Test
     void shouldThrowExceptionForNonExistingCategory(){
         // Given
-        when(categoryRepository.findByName("wrongCategory")).thenReturn(null);
+        when(categoryRepository.findByName("wrongCategory")).thenReturn(Optional.empty());
+        when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
 
         // When
         // Then
         assertThrows(RuntimeException.class, ()->{
-            trickService.getTricksByCategory("wrongCategory", userProgress);
+            trickService.getTricksByCategory("wrongCategory", "user");
         });
     }
 
@@ -161,10 +172,11 @@ public class TrickServiceUnitTest {
                 "L",
                 "lorem ipsum2"
         );
-        when(trickRepository.findByName("testTrick2")).thenReturn(trick2);
+        when(trickRepository.findByName("testTrick2")).thenReturn(Optional.of(trick2));
+        when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
 
         // When
-        trickService.setTrickAsMastered("testTrick2", userProgress);
+        trickService.setTrickAsMastered("testTrick2", "user");
 
         // Then
         assertTrue(userProgress.getMasteredTricks().contains(trick2));
@@ -173,12 +185,13 @@ public class TrickServiceUnitTest {
     @Test
     void shouldThrowExceptionForNonExistingTrickWhileMarkedAsMastered(){
         // Given
-        when(trickRepository.findByName("wrongTrick")).thenReturn(null);
+        when(trickRepository.findByName("wrongTrick")).thenReturn(Optional.empty());
+        when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
 
         // When
         // Then
         assertThrows(RuntimeException.class, ()->{
-            trickService.setTrickAsMastered("wrongTrick", userProgress);
+            trickService.setTrickAsMastered("wrongTrick", "user");
         });
     }
 

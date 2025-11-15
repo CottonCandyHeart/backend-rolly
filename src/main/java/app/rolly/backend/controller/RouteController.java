@@ -21,15 +21,13 @@ public class RouteController {
 
     @GetMapping("/get")
     public ResponseEntity<?> getUserRoutes(Authentication authentication){
-        User user = (User) authentication.getPrincipal();
-        List<RouteDto> routeDtos = routeService.getUserRoute(user);
+        List<RouteDto> routeDtos = routeService.getUserRoute(authentication.getName());
         return new ResponseEntity<>(routeDtos, HttpStatus.OK);
     }
 
     @GetMapping("/get-by-date")
     public ResponseEntity<?> getUserRoutesByDate(@RequestBody LocalDate date, Authentication authentication){
-        User user = (User) authentication.getPrincipal();
-        List<RouteDto> routeDtos = routeService.getUserRouteByDate(user, date);
+        List<RouteDto> routeDtos = routeService.getUserRouteByDate(authentication.getName(), date);
         return new ResponseEntity<>(routeDtos, HttpStatus.OK);
     }
 

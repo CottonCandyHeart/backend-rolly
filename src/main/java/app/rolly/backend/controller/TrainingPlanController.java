@@ -18,14 +18,14 @@ public class TrainingPlanController {
     @GetMapping("/")
     public ResponseEntity<?> getTrainings(Authentication authentication){
         return new ResponseEntity<>(
-                trainingPlanService.getTrainingPlans((User) authentication.getPrincipal()),
+                trainingPlanService.getTrainingPlans(authentication.getName()),
                 HttpStatus.OK
         );
     }
 
     @PostMapping("/add")
     public ResponseEntity<?> addTraining(@RequestBody TrainingPlanDto trainingPlanDto, Authentication authentication){
-        if (trainingPlanService.addTrainingPlan(trainingPlanDto, (User) authentication.getPrincipal())){
+        if (trainingPlanService.addTrainingPlan(trainingPlanDto, authentication.getName())){
             return new ResponseEntity<>("Training Plan created", HttpStatus.OK);
         }
 
@@ -34,7 +34,7 @@ public class TrainingPlanController {
 
     @PostMapping("/modify")
     public ResponseEntity<?> modifyTraining(@RequestBody TrainingPlanDto trainingPlanDto, Authentication authentication){
-        if (trainingPlanService.modifyTrainingPlan(trainingPlanDto, (User) authentication.getPrincipal())){
+        if (trainingPlanService.modifyTrainingPlan(trainingPlanDto, authentication.getName())){
             return new ResponseEntity<>("Training Plan modified", HttpStatus.OK);
         }
 

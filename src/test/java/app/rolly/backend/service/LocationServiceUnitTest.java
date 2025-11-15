@@ -10,6 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
@@ -37,7 +39,7 @@ public class LocationServiceUnitTest {
     @Test
     void shouldReturnLocationDto(){
         // Given
-        when(locationRepository.findByName("testName")).thenReturn(location);
+        when(locationRepository.findByName("testName")).thenReturn(Optional.of(location));
 
         // When
         LocationDto locationDto = locationService.getLocation("testName");
@@ -54,7 +56,7 @@ public class LocationServiceUnitTest {
     @Test
     void shouldReturnEmptyLocationDto(){
         // Given
-        when(locationRepository.findByName("wrongName")).thenReturn(null);
+        when(locationRepository.findByName("wrongName")).thenReturn(Optional.empty());
 
         // When
         LocationDto locationDto = locationService.getLocation("wrongName");
@@ -75,7 +77,7 @@ public class LocationServiceUnitTest {
         );
         LocationDto locationDto = new LocationDto(newLocation);
 
-        when(locationRepository.findByName("newLocation")).thenReturn(null);
+        when(locationRepository.findByName("newLocation")).thenReturn(Optional.empty());
 
         // When
         boolean result = locationService.addLocation(locationDto);
@@ -96,7 +98,7 @@ public class LocationServiceUnitTest {
         );
         LocationDto locationDto = new LocationDto(newLocation);
 
-        when(locationRepository.findByName("newLocation")).thenReturn(newLocation);
+        when(locationRepository.findByName("newLocation")).thenReturn(Optional.of(newLocation));
 
         // When
         boolean result = locationService.addLocation(locationDto);
@@ -108,7 +110,7 @@ public class LocationServiceUnitTest {
     @Test
     void shouldRemoveExistingLocation(){
         // Given
-        when(locationRepository.findByName("testName")).thenReturn(location);
+        when(locationRepository.findByName("testName")).thenReturn(Optional.of(location));
 
         // When
         boolean result = locationService.removeLocation("testName");
@@ -120,7 +122,7 @@ public class LocationServiceUnitTest {
     @Test
     void shouldReturnFalseForRemovingNonExistingLocation(){
         // Given
-        when(locationRepository.findByName("wrongName")).thenReturn(null);
+        when(locationRepository.findByName("wrongName")).thenReturn(Optional.empty());
 
         // When
         boolean result = locationService.removeLocation("wrongName");
@@ -141,7 +143,7 @@ public class LocationServiceUnitTest {
         );
         LocationDto locationDto = new LocationDto(newLocation);
 
-        when(locationRepository.findByName("testName")).thenReturn(location);
+        when(locationRepository.findByName("testName")).thenReturn(Optional.of(location));
 
         // When
         boolean result = locationService.modifyLocation("testName", locationDto);
@@ -162,7 +164,7 @@ public class LocationServiceUnitTest {
         );
         LocationDto locationDto = new LocationDto(newLocation);
 
-        when(locationRepository.findByName("wrongName")).thenReturn(null);
+        when(locationRepository.findByName("wrongName")).thenReturn(Optional.empty());
 
         // When
         boolean result = locationService.modifyLocation("wrongName", locationDto);

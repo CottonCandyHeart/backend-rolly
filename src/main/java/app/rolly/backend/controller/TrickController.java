@@ -14,25 +14,22 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/trick")
 @RequiredArgsConstructor
 public class TrickController {
-    private TrickService trickService;
+    private final TrickService trickService;
 
     @GetMapping("/{name}")
     public ResponseEntity<?> getTrick(@PathVariable String name, Authentication authentication){
-        User user = (User) authentication.getPrincipal();
-        return new ResponseEntity<>(trickService.getTrick(name, user.getUserProgress()), HttpStatus.OK);
+        return new ResponseEntity<>(trickService.getTrick(name, authentication.getName()), HttpStatus.OK);
     }
 
     @PostMapping("/{name}")
     public ResponseEntity<?> setTrickAsMastered(@PathVariable String name, Authentication authentication){
-        User user = (User) authentication.getPrincipal();
-        trickService.setTrickAsMastered(name, user.getUserProgress());
+        trickService.setTrickAsMastered(name, authentication.getName());
         return new ResponseEntity<>("Trick set as mastered", HttpStatus.OK);
     }
 
     @GetMapping("/{category}")
     public ResponseEntity<?> getTrickByCategoryName(@PathVariable String category, Authentication authentication){
-        User user = (User) authentication.getPrincipal();
-        return new ResponseEntity<>(trickService.getTricksByCategory(category, user.getUserProgress()), HttpStatus.OK);
+        return new ResponseEntity<>(trickService.getTricksByCategory(category, authentication.getName()), HttpStatus.OK);
     }
 
     @GetMapping("/categories")

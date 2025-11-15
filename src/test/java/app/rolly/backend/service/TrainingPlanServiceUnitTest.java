@@ -5,6 +5,7 @@ import app.rolly.backend.model.Role;
 import app.rolly.backend.model.TrainingPlan;
 import app.rolly.backend.model.User;
 import app.rolly.backend.repository.TrainingPlanRepository;
+import app.rolly.backend.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +25,8 @@ import static org.mockito.Mockito.when;
 public class TrainingPlanServiceUnitTest {
     @Mock
     private TrainingPlanRepository trainingPlanRepository;
+    @Mock
+    private UserRepository userRepository;
 
     @InjectMocks
     private TrainingPlanService trainingPlanService;
@@ -61,9 +64,10 @@ public class TrainingPlanServiceUnitTest {
                 user
         );
         when(trainingPlanRepository.findByUser(user)).thenReturn(List.of(trainingPlan, trainingPlan2));
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
         // When
-        List<TrainingPlanDto> result = trainingPlanService.getTrainingPlans(user);
+        List<TrainingPlanDto> result = trainingPlanService.getTrainingPlans("username");
 
         // Then
         assertFalse(result.isEmpty());
@@ -74,9 +78,10 @@ public class TrainingPlanServiceUnitTest {
     void shouldReturnEmptyTrainingPlanListForUser(){
         // Given
         when(trainingPlanRepository.findByUser(user)).thenReturn(null);
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
         // When
-        List<TrainingPlanDto> result = trainingPlanService.getTrainingPlans(user);
+        List<TrainingPlanDto> result = trainingPlanService.getTrainingPlans("username");
 
         // Then
         assertNull(result);
@@ -93,9 +98,10 @@ public class TrainingPlanServiceUnitTest {
                 user
         );
         TrainingPlanDto trainingPlanDto = new TrainingPlanDto(trainingPlan2);
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
         // When
-        boolean result = trainingPlanService.addTrainingPlan(trainingPlanDto, user);
+        boolean result = trainingPlanService.addTrainingPlan(trainingPlanDto, "username");
 
         // Then
         assertTrue(result);
@@ -115,9 +121,10 @@ public class TrainingPlanServiceUnitTest {
 
         when(trainingPlanRepository.existsByDateTimeAndUser(LocalDateTime.of(2025,1,1,1,1,1), user))
                 .thenReturn(true);
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
         // When
-        boolean result = trainingPlanService.addTrainingPlan(trainingPlanDto, user);
+        boolean result = trainingPlanService.addTrainingPlan(trainingPlanDto, "username");
 
         // Then
         assertFalse(result);
@@ -137,9 +144,10 @@ public class TrainingPlanServiceUnitTest {
         trainingPlanDto.setId(trainingPlan.getId());
 
         when(trainingPlanRepository.findById(trainingPlan.getId())).thenReturn(Optional.of(trainingPlan));
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
         // When
-        boolean result = trainingPlanService.modifyTrainingPlan(trainingPlanDto, user);
+        boolean result = trainingPlanService.modifyTrainingPlan(trainingPlanDto, "username");
 
         // Then
         assertTrue(result);
@@ -161,9 +169,10 @@ public class TrainingPlanServiceUnitTest {
         when(trainingPlanRepository.findById(trainingPlan.getId())).thenReturn(Optional.of(trainingPlan));
         when(trainingPlanRepository.existsByDateTimeAndUser(LocalDateTime.of(2025,2,1,1,1,1), user))
                 .thenReturn(false);
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
         // When
-        boolean result = trainingPlanService.modifyTrainingPlan(trainingPlanDto, user);
+        boolean result = trainingPlanService.modifyTrainingPlan(trainingPlanDto, "username");
 
         // Then
         assertTrue(result);
@@ -183,9 +192,10 @@ public class TrainingPlanServiceUnitTest {
         trainingPlanDto.setId(trainingPlan.getId());
 
         when(trainingPlanRepository.findById(trainingPlan.getId())).thenReturn(Optional.empty());
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
         // When
-        boolean result = trainingPlanService.modifyTrainingPlan(trainingPlanDto, user);
+        boolean result = trainingPlanService.modifyTrainingPlan(trainingPlanDto, "username");
 
         // Then
         assertFalse(result);
@@ -207,9 +217,10 @@ public class TrainingPlanServiceUnitTest {
         when(trainingPlanRepository.findById(trainingPlan.getId())).thenReturn(Optional.of(trainingPlan));
         when(trainingPlanRepository.existsByDateTimeAndUser(LocalDateTime.of(2025,2,1,1,1,1), user))
                 .thenReturn(true);
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
         // When
-        boolean result = trainingPlanService.modifyTrainingPlan(trainingPlanDto, user);
+        boolean result = trainingPlanService.modifyTrainingPlan(trainingPlanDto, "username");
 
         // Then
         assertFalse(result);

@@ -74,7 +74,7 @@ public class EventServiceUnitTest {
         // Given
         EventDto eventDto = new EventDto(event);
         when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
-        when(locationRepository.findByName("location")).thenReturn(location);
+        when(locationRepository.findByName("location")).thenReturn(Optional.of(location));
 
         // When
         boolean result = eventService.createEvent(eventDto);
@@ -87,8 +87,8 @@ public class EventServiceUnitTest {
     void shouldReturnFalseForNonExistingUserWhileCreatingEvent(){
         // Given
         EventDto eventDto = new EventDto(event);
-        when(userRepository.findByUsername("user")).thenReturn(null);
-        when(locationRepository.findByName("location")).thenReturn(location);
+        when(userRepository.findByUsername("user")).thenReturn(Optional.empty());
+        when(locationRepository.findByName("location")).thenReturn(Optional.of(location));
 
         // When
         boolean result = eventService.createEvent(eventDto);
@@ -102,7 +102,7 @@ public class EventServiceUnitTest {
         // Given
         EventDto eventDto = new EventDto(event);
         when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
-        when(locationRepository.findByName("location")).thenReturn(null);
+        when(locationRepository.findByName("location")).thenReturn(Optional.empty());
 
         // When
         boolean result = eventService.createEvent(eventDto);
@@ -116,17 +116,17 @@ public class EventServiceUnitTest {
         // Given
         EventDto eventDto = new EventDto(event);
         when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
-        when(locationRepository.findByName("location")).thenReturn(location);
+        when(locationRepository.findByName("location")).thenReturn(Optional.of(location));
         when(eventRepository.findByOrganizerAndDateAndTimeAndLocation(
                 user,
                 event.getDate(),
                 event.getTime(),
                 location
-        )).thenReturn(event);
+        )).thenReturn(Optional.of(event));
 
         // When
         int before = event.getAttendee().size();
-        boolean result = eventService.joinEvent(eventDto, user);
+        boolean result = eventService.joinEvent(eventDto, "user");
         int after = event.getAttendee().size();
 
         // Then
@@ -145,17 +145,17 @@ public class EventServiceUnitTest {
         }
 
         when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
-        when(locationRepository.findByName("location")).thenReturn(location);
+        when(locationRepository.findByName("location")).thenReturn(Optional.of(location));
         when(eventRepository.findByOrganizerAndDateAndTimeAndLocation(
                 user,
                 event.getDate(),
                 event.getTime(),
                 location
-        )).thenReturn(event);
+        )).thenReturn(Optional.of(event));
 
         // When
         int before = event.getAttendee().size();
-        boolean result = eventService.joinEvent(eventDto, user);
+        boolean result = eventService.joinEvent(eventDto, "user");
         int after = event.getAttendee().size();
 
         // Then
@@ -178,17 +178,18 @@ public class EventServiceUnitTest {
 
         EventDto eventDto = new EventDto(event);
         when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
-        when(locationRepository.findByName("location")).thenReturn(location);
+        when(userRepository.findByUsername("user2")).thenReturn(Optional.of(user1));
+        when(locationRepository.findByName("location")).thenReturn(Optional.of(location));
         when(eventRepository.findByOrganizerAndDateAndTimeAndLocation(
                 user,
                 event.getDate(),
                 event.getTime(),
                 location
-        )).thenReturn(event);
+        )).thenReturn(Optional.of(event));
 
         // When
         int before = event.getAttendee().size();
-        boolean result = eventService.joinEvent(eventDto, user1);
+        boolean result = eventService.joinEvent(eventDto, "user2");
         int after = event.getAttendee().size();
 
         // Then
@@ -212,17 +213,18 @@ public class EventServiceUnitTest {
 
         EventDto eventDto = new EventDto(event);
         when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
-        when(locationRepository.findByName("location")).thenReturn(location);
+        when(userRepository.findByUsername("user2")).thenReturn(Optional.of(user1));
+        when(locationRepository.findByName("location")).thenReturn(Optional.of(location));
         when(eventRepository.findByOrganizerAndDateAndTimeAndLocation(
                 user,
                 event.getDate(),
                 event.getTime(),
                 location
-        )).thenReturn(event);
+        )).thenReturn(Optional.of(event));
 
         // When
         int before = event.getAttendee().size();
-        boolean result = eventService.leaveEvent(eventDto, user1);
+        boolean result = eventService.leaveEvent(eventDto, "user2");
         int after = event.getAttendee().size();
 
         // Then
@@ -244,17 +246,18 @@ public class EventServiceUnitTest {
 
         EventDto eventDto = new EventDto(event);
         when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
-        when(locationRepository.findByName("location")).thenReturn(location);
+        when(userRepository.findByUsername("user2")).thenReturn(Optional.of(user1));
+        when(locationRepository.findByName("location")).thenReturn(Optional.of(location));
         when(eventRepository.findByOrganizerAndDateAndTimeAndLocation(
                 user,
                 event.getDate(),
                 event.getTime(),
                 location
-        )).thenReturn(event);
+        )).thenReturn(Optional.of(event));
 
         // When
         int before = event.getAttendee().size();
-        boolean result = eventService.leaveEvent(eventDto, user1);
+        boolean result = eventService.leaveEvent(eventDto, "user2");
         int after = event.getAttendee().size();
 
         // Then
@@ -285,13 +288,13 @@ public class EventServiceUnitTest {
 
         EventDto eventDto = new EventDto(event);
         when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
-        when(locationRepository.findByName("location")).thenReturn(location);
+        when(locationRepository.findByName("location")).thenReturn(Optional.of(location));
         when(eventRepository.findByOrganizerAndDateAndTimeAndLocation(
                 user,
                 event.getDate(),
                 event.getTime(),
                 location
-        )).thenReturn(event);
+        )).thenReturn(Optional.of(event));
 
         // When
         int result = eventService.getNumberOfParticipants(eventDto);
@@ -305,13 +308,13 @@ public class EventServiceUnitTest {
         // Given
         EventDto eventDto = new EventDto(event);
         when(userRepository.findByUsername("user")).thenReturn(Optional.of(user));
-        when(locationRepository.findByName("location")).thenReturn(location);
+        when(locationRepository.findByName("location")).thenReturn(Optional.of(location));
         when(eventRepository.findByOrganizerAndDateAndTimeAndLocation(
                 user,
                 event.getDate(),
                 event.getTime(),
                 location
-        )).thenReturn(event);
+        )).thenReturn(Optional.of(event));
 
         // When
         int result = eventService.getNumberOfParticipants(eventDto);

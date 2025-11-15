@@ -5,6 +5,7 @@ import app.rolly.backend.model.Role;
 import app.rolly.backend.model.User;
 import app.rolly.backend.model.UserProgress;
 import app.rolly.backend.repository.UserProgressRepository;
+import app.rolly.backend.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,13 +15,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class UserProgressServiceUnitTest {
     @Mock
     private UserProgressRepository userProgressRepository;
+    @Mock
+    private UserRepository userRepository;
 
     @InjectMocks
     private UserProgressService userProgressService;
@@ -54,6 +59,7 @@ public class UserProgressServiceUnitTest {
     void shouldReturnUserProgressDto(){
         // Given
         UserProgressDto expected = new UserProgressDto(userProgress);
+        when(userRepository.findByUsername("username")).thenReturn(Optional.of(user));
 
         // When
         UserProgressDto result = userProgressService.getUserProgress(user.getUsername());
@@ -81,6 +87,7 @@ public class UserProgressServiceUnitTest {
         );
 
         UserProgressDto userProgressDto = new UserProgressDto(userProgress2);
+        when(userRepository.findByUsername("username")).thenReturn(Optional.of(user));
 
         // When
         userProgressService.updateStats(userProgressDto, user.getUsername());

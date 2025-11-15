@@ -5,6 +5,7 @@ import app.rolly.backend.model.Notification;
 import app.rolly.backend.model.Role;
 import app.rolly.backend.model.User;
 import app.rolly.backend.repository.NotificationRepository;
+import app.rolly.backend.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +25,8 @@ import static org.mockito.Mockito.when;
 public class NotificationServiceUnitTest {
     @Mock
     private NotificationRepository notificationRepository;
+    @Mock
+    private UserRepository userRepository;
 
     @InjectMocks
     private NotificationService notificationService;
@@ -50,9 +53,10 @@ public class NotificationServiceUnitTest {
         user.getNotifications().add(n2);
 
         when(notificationRepository.getNotificationsByRecipient(user)).thenReturn(List.of(n1, n2));
+        when(userRepository.findByUsername("username")).thenReturn(Optional.of(user));
 
         // When
-        List<NotificationDto> result = notificationService.getNotifications(user);
+        List<NotificationDto> result = notificationService.getNotifications("username");
 
         // Then
         assertEquals(2, result.size());
@@ -64,9 +68,10 @@ public class NotificationServiceUnitTest {
         Notification n2 = new Notification("title", "message",
                 LocalDateTime.of(2025,1,1,1,1,1), user);
         NotificationDto notificationDto = new NotificationDto(n2);
+        when(userRepository.findByUsername("username")).thenReturn(Optional.of(user));
 
         // When
-        boolean result = notificationService.addNotification(notificationDto, user);
+        boolean result = notificationService.addNotification(notificationDto, "username");
 
         // Then
         assertTrue(result);

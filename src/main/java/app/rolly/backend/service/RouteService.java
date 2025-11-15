@@ -23,8 +23,9 @@ public class RouteService {
     private final RouteRepository routeRepository;
     private final UserRepository userRepository;
 
-    public List<RouteDto> getUserRoute(User user){
+    public List<RouteDto> getUserRoute(String username){
         try{
+            User user = userRepository.findByUsername(username).get();
             return routeRepository.getRouteByCreatedBy(user).stream()
                     .map(RouteDto::new)
                     .toList();
@@ -34,8 +35,9 @@ public class RouteService {
 
     }
 
-    public List<RouteDto> getUserRouteByDate(User user, LocalDate date){
+    public List<RouteDto> getUserRouteByDate(String username, LocalDate date){
         try{
+            User user = userRepository.findByUsername(username).get();
             return routeRepository.getRouteByCreatedByAndDate(user, date).stream()
                     .map(RouteDto::new)
                     .toList();

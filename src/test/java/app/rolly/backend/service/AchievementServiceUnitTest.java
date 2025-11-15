@@ -74,10 +74,12 @@ public class AchievementServiceUnitTest {
     @Test
     void shouldReturnAchievementDtoSetForUser(){
         // Given
+        when(userRepository.findByUsername(user1.getUsername())).thenReturn(Optional.of(user1));
+        when(userRepository.findByUsername(user2.getUsername())).thenReturn(Optional.of(user2));
 
         // When
-        Set<AchievementDto> result1 = achievementService.getUserAchievements(user1);
-        Set<AchievementDto> result2 = achievementService.getUserAchievements(user2);
+        Set<AchievementDto> result1 = achievementService.getUserAchievements("username1");
+        Set<AchievementDto> result2 = achievementService.getUserAchievements("username2");
 
         // Then
         assertEquals(3, result1.size());
@@ -90,9 +92,10 @@ public class AchievementServiceUnitTest {
         User user3 = new User(
                 "username3", "email3", "hashedPasswd3",
                 LocalDate.of(2000,1,1), new Role("role", "role"));
+        when(userRepository.findByUsername(user3.getUsername())).thenReturn(Optional.of(user3));
 
         // When
-        Set<AchievementDto> result = achievementService.getUserAchievements(user3);
+        Set<AchievementDto> result = achievementService.getUserAchievements("username3");
 
         // Then
         assertEquals(0, result.size());
@@ -129,9 +132,10 @@ public class AchievementServiceUnitTest {
                 LocalDate.of(2000,1,1), new Role("role", "role"));
 
         when(achievementRepository.findById(a1.getId())).thenReturn(Optional.of(a1));
+        when(userRepository.findByUsername(user3.getUsername())).thenReturn(Optional.of(user3));
 
         // When
-        boolean result = achievementService.addAchievementToUser(user3, a1.getId());
+        boolean result = achievementService.addAchievementToUser("username3", a1.getId());
 
         // Then
         assertTrue(result);
@@ -140,10 +144,16 @@ public class AchievementServiceUnitTest {
     @Test
     void shouldReturnFalseWhenUserAlreadyHasAchievement(){
         // Given
+        User user3 = new User(
+                "username3", "email3", "hashedPasswd3",
+                LocalDate.of(2000,1,1), new Role("role", "role"));
+        user3.getAchievements().add(a1);
+
         when(achievementRepository.findById(a1.getId())).thenReturn(Optional.of(a1));
+        when(userRepository.findByUsername(user3.getUsername())).thenReturn(Optional.of(user3));
 
         // When
-        boolean result = achievementService.addAchievementToUser(user1, a1.getId());
+        boolean result = achievementService.addAchievementToUser("username3", a1.getId());
 
         // Then
         assertFalse(result);
@@ -152,12 +162,13 @@ public class AchievementServiceUnitTest {
     @Test
     void shouldThrowExceptionWhenAchievementToAddNotFound(){
         // Given
-        when(achievementRepository.findById(a1.getId())).thenReturn(null);
+        when(achievementRepository.findById(a1.getId())).thenReturn(Optional.empty());
+        when(userRepository.findByUsername(user2.getUsername())).thenReturn(Optional.of(user2));
 
         // When
         // Then
         assertThrows(RuntimeException.class,()->{
-            achievementService.addAchievementToUser(user2, a1.getId());
+            achievementService.addAchievementToUser("username2", a1.getId());
         });
     }
 
@@ -165,9 +176,10 @@ public class AchievementServiceUnitTest {
     void shouldRemoveAchievementFromUser(){
         // Given
         when(achievementRepository.findById(a1.getId())).thenReturn(Optional.of(a1));
+        when(userRepository.findByUsername(user1.getUsername())).thenReturn(Optional.of(user1));
 
         // When
-        boolean result = achievementService.removeAchievementFromUser(user1, a1.getId());
+        boolean result = achievementService.removeAchievementFromUser("username1", a1.getId());
 
         // Then
         assertTrue(result);
@@ -177,9 +189,10 @@ public class AchievementServiceUnitTest {
     void shouldReturnFalseWhenAchievementIsNotOnList(){
         // Given
         when(achievementRepository.findById(a1.getId())).thenReturn(Optional.of(a1));
+        when(userRepository.findByUsername(user2.getUsername())).thenReturn(Optional.of(user2));
 
         // When
-        boolean result = achievementService.removeAchievementFromUser(user2, a1.getId());
+        boolean result = achievementService.removeAchievementFromUser("username2", a1.getId());
 
         // Then
         assertFalse(result);
@@ -189,11 +202,12 @@ public class AchievementServiceUnitTest {
     void shouldThrowExceptionWhenAchievementToRemoveNotFound(){
         // Given
         when(achievementRepository.findById(a1.getId())).thenReturn(null);
+        when(userRepository.findByUsername(user1.getUsername())).thenReturn(Optional.of(user1));
 
         // When
         // Then
         assertThrows(RuntimeException.class, ()->{
-            achievementService.removeAchievementFromUser(user1, a1.getId());
+            achievementService.removeAchievementFromUser("username1", a1.getId());
         });
     }
 }

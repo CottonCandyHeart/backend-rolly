@@ -18,14 +18,14 @@ public class NotificationController {
     @GetMapping("/")
     public ResponseEntity<?> getNotifications(Authentication authentication){
         return new ResponseEntity<>(
-                notificationService.getNotifications((User) authentication.getPrincipal()),
+                notificationService.getNotifications(authentication.getName()),
                 HttpStatus.OK
         );
     }
 
     @PostMapping("/add")
     public ResponseEntity<?> addNotification(@RequestBody NotificationDto notificationDto, Authentication authentication){
-        if (notificationService.addNotification(notificationDto, (User) authentication.getPrincipal())){
+        if (notificationService.addNotification(notificationDto, authentication.getName())){
             return new ResponseEntity<>("Notification added", HttpStatus.OK);
         }
 

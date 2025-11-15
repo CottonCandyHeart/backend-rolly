@@ -53,7 +53,7 @@ public class AuthControllerUnitTest {
         userDto.setRole("USER");
 
         Role role = new Role("USER", "lorem ipsum");
-        when(roleRepository.findByName("USER")).thenReturn(role);
+        when(roleRepository.findByName("USER")).thenReturn(Optional.of(role));
 
         // When
         ResponseEntity<?> response = authController.register(userDto);

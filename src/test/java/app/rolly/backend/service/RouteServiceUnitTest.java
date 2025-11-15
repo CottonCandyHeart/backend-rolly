@@ -64,10 +64,13 @@ public class RouteServiceUnitTest {
                 150
         );
         route2.setDate(LocalDate.of(2025,2,2));
+        user.getRoutesCreated().add(route2);
+
+        when(userRepository.findByUsername("username")).thenReturn(Optional.of(user));
         when(routeRepository.getRouteByCreatedBy(user)).thenReturn(List.of(route, route2));
 
         // When
-        List<RouteDto> routeDtos = routeService.getUserRoute(user);
+        List<RouteDto> routeDtos = routeService.getUserRoute("username");
 
         // Then
         assertNotNull(routeDtos);
@@ -78,9 +81,10 @@ public class RouteServiceUnitTest {
     void shouldReturnEmptyUserRouteDtoList(){
         // Given
         when(routeRepository.getRouteByCreatedBy(user)).thenReturn(null);
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
         // When
-        List<RouteDto> routeDtos = routeService.getUserRoute(user);
+        List<RouteDto> routeDtos = routeService.getUserRoute("username");
 
         // Then
         assertNull(routeDtos);
@@ -102,10 +106,11 @@ public class RouteServiceUnitTest {
                         user,
                         LocalDate.of(2025, 2,2))
         ).thenReturn(List.of(route2));
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
         // When
         List<RouteDto> routeDtos = routeService.getUserRouteByDate(
-                user,
+                "username",
                 LocalDate.of(2025, 2,2)
         );
 
@@ -122,10 +127,11 @@ public class RouteServiceUnitTest {
                         user,
                         LocalDate.of(2025, 2,2))
         ).thenReturn(null);
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
         // When
         List<RouteDto> routeDtos = routeService.getUserRouteByDate(
-                user,
+                "username",
                 LocalDate.of(2025, 2,2)
         );
 

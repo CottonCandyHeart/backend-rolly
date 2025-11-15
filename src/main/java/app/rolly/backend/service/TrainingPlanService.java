@@ -4,6 +4,7 @@ import app.rolly.backend.dto.TrainingPlanDto;
 import app.rolly.backend.model.TrainingPlan;
 import app.rolly.backend.model.User;
 import app.rolly.backend.repository.TrainingPlanRepository;
+import app.rolly.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,19 +15,21 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TrainingPlanService {
     private final TrainingPlanRepository trainingPlanRepository;
+    private final UserRepository userRepository;
 
-    public List<TrainingPlanDto> getTrainingPlans(User user){
+    public List<TrainingPlanDto> getTrainingPlans(String username){
         try{
+            User user = userRepository.findByUsername(username).get();
             return trainingPlanRepository.findByUser(user).stream()
                     .map(TrainingPlanDto::new)
                     .toList();
         } catch (Exception e) {
             return null;
         }
-
     }
 
-    public boolean addTrainingPlan(TrainingPlanDto trainingPlanDto, User user) {
+    public boolean addTrainingPlan(TrainingPlanDto trainingPlanDto, String username) {
+        User user = userRepository.findByUsername(username).get();
         if (trainingPlanRepository.existsByDateTimeAndUser(trainingPlanDto.getDateTime(), user)) {
             return false;
         }
@@ -37,7 +40,8 @@ public class TrainingPlanService {
         return true;
     }
 
-    public boolean modifyTrainingPlan(TrainingPlanDto trainingPlanDto, User user){
+    public boolean modifyTrainingPlan(TrainingPlanDto trainingPlanDto, String username){
+        User user = userRepository.findByUsername(username).get();
         Optional<TrainingPlan> isPresent;
         if ((isPresent = trainingPlanRepository.findById(trainingPlanDto.getId())).isEmpty()){
             return false;

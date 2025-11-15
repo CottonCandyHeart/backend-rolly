@@ -6,13 +6,15 @@ import app.rolly.backend.repository.LocationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class LocationService {
     private final LocationRepository locationRepository;
 
     public boolean addLocation(LocationDto locationDto){
-        if (locationRepository.findByName(locationDto.getName()) != null){
+        if (locationRepository.findByName(locationDto.getName()).isPresent()){
             return false;
         }
 
@@ -28,7 +30,7 @@ public class LocationService {
     }
 
     public boolean removeLocation(String locationName){
-        if (locationRepository.findByName(locationName) == null){
+        if (locationRepository.findByName(locationName).isEmpty()){
             return false;
         }
 
@@ -38,31 +40,31 @@ public class LocationService {
 
     public boolean modifyLocation(String name, LocationDto locationDto){
 
-        Location oldLocation;
+        Optional<Location> oldLocation;
 
-        if ((oldLocation = locationRepository.findByName(name)) == null){
+        if ((oldLocation = locationRepository.findByName(name)).isEmpty()){
             return false;
         }
 
-        oldLocation.setName(locationDto.getName());
-        oldLocation.setCity(locationDto.getCity());
-        oldLocation.setCountry(locationDto.getCountry());
-        oldLocation.setLatitude(locationDto.getLatitude());
-        oldLocation.setLongitude(locationDto.getLongitude());
+        oldLocation.get().setName(locationDto.getName());
+        oldLocation.get().setCity(locationDto.getCity());
+        oldLocation.get().setCountry(locationDto.getCountry());
+        oldLocation.get().setLatitude(locationDto.getLatitude());
+        oldLocation.get().setLongitude(locationDto.getLongitude());
 
-        locationRepository.save(oldLocation);
+        locationRepository.save(oldLocation.get());
 
         return true;
     }
 
     public LocationDto getLocation(String name){
-        Location location = locationRepository.findByName(name);
+        Optional<Location> location = locationRepository.findByName(name);
 
-        if (location == null) {
+        if (location.isEmpty()) {
             return null;
         }
 
-        return new LocationDto(location);
+        return new LocationDto(location.get());
     }
 
 }

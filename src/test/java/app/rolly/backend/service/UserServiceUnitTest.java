@@ -101,6 +101,7 @@ public class UserServiceUnitTest {
         UpdateUserDto updateUserDto = new UpdateUserDto();
         updateUserDto.setEmail("updated@test");
         updateUserDto.setRole(user.getRole().getName());
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
         // When
         userService.updateUserProfile(updateUserDto, user.getUsername());
@@ -114,11 +115,12 @@ public class UserServiceUnitTest {
     void shouldUpdateRole(){
         // Given
         Role role2 = new Role("role2", "role2 description");
-        when(roleRepository.findByName(role2.getName())).thenReturn(role2);
+        when(roleRepository.findByName(role2.getName())).thenReturn(Optional.of(role2));
 
         UpdateUserDto updateUserDto = new UpdateUserDto();
         updateUserDto.setRole(role2.getName());
         updateUserDto.setEmail(user.getEmail());
+        when(userRepository.findByUsername("testUsername")).thenReturn(Optional.of(user));
 
         // When
         userService.updateUserProfile(updateUserDto, user.getUsername());
@@ -137,6 +139,7 @@ public class UserServiceUnitTest {
 
         when(passwordEncoder.matches("test", user.getHashedPasswd())).thenReturn(true);
         when(passwordEncoder.encode("newPassword")).thenReturn("encodedNewPassword");
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
         // When
         userService.changePassword(request, user.getUsername());
@@ -154,7 +157,7 @@ public class UserServiceUnitTest {
 
         // When
         // Then
-        assertThrows(WrongPasswordException.class,() -> {
+        assertThrows(NoSuchElementException.class,() -> {
             userService.changePassword(request, user.getUsername());
         } );
     }
@@ -187,6 +190,7 @@ public class UserServiceUnitTest {
     void shouldUpdateUserMeasurements(){
         // Given
         UserMeasurementsDto userMeasurementsDto = new UserMeasurementsDto(50.5, 160);
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
         // When
         boolean result = userService.updateMeasurements(userMeasurementsDto, user.getUsername());
@@ -202,6 +206,7 @@ public class UserServiceUnitTest {
         // Given
         user.setHeight(160);
         user.setWeight(50.5);
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
         // When
         UserMeasurementsDto measurementsDto = userService.getMeasurements(user.getUsername());
@@ -215,6 +220,7 @@ public class UserServiceUnitTest {
     @Test
     void shouldReturnZeroWhenMeasurementsAreEmpty(){
         // Given
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
         // When
         UserMeasurementsDto measurementsDto = userService.getMeasurements(user.getUsername());

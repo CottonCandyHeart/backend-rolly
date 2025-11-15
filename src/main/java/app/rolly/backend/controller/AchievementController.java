@@ -26,7 +26,7 @@ public class AchievementController {
     @GetMapping("/user-achievements")
     public ResponseEntity<?> getUserAchievements(Authentication authentication){
         Set<AchievementDto> achievementDtos = achievementService.getUserAchievements(
-                (User) authentication.getPrincipal());
+                authentication.getName());
 
         return new ResponseEntity<>(achievementDtos, HttpStatus.OK);
     }
@@ -34,7 +34,7 @@ public class AchievementController {
     @PostMapping("/add/{achId}")
     public ResponseEntity<?> addAchievementToUser(@PathVariable Long achId, Authentication authentication){
         boolean result = achievementService.addAchievementToUser(
-                (User) authentication.getPrincipal(),
+                authentication.getName(),
                 achId
         );
 
@@ -48,7 +48,7 @@ public class AchievementController {
         boolean result;
         try {
             result = achievementService.removeAchievementFromUser(
-                    (User) authentication.getPrincipal(),
+                    authentication.getName(),
                     achId
             );
         } catch (RuntimeException e){
