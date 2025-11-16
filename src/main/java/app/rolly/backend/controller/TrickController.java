@@ -27,8 +27,9 @@ public class TrickController {
         return new ResponseEntity<>("Trick set as mastered", HttpStatus.OK);
     }
 
-    @GetMapping("/{category}")
+    @GetMapping("/by-cat/{category}")
     public ResponseEntity<?> getTrickByCategoryName(@PathVariable String category, Authentication authentication){
+        System.out.println("------> Category name: " + category);
         return new ResponseEntity<>(trickService.getTricksByCategory(category, authentication.getName()), HttpStatus.OK);
     }
 
