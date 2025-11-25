@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -57,11 +58,48 @@ public class TrickService {
         UserProgress userProgress = user.get().getUserProgress();
         Optional<Trick> trick = trickRepository.findByName(trickName);
 
+        if (userProgress == null) {
+            userProgress = new UserProgress();
+            userProgress.setUser(user.get());
+            user.get().setUserProgress(userProgress);
+            userProgress.setMasteredTricks(new HashSet<>());
+            userProgressRepository.save(userProgress);
+            userRepository.save(user.get());
+        }
+
         if (trick.isEmpty()) throw new NotFoundException("Trick");
 
         if (!userProgress.getMasteredTricks().contains(trick.get())){
             userProgress.getMasteredTricks().add(trick.get());
+            trick.get().getUserProgresses().add(userProgress);
+
             userProgressRepository.save(userProgress);
+            trickRepository.save(trick.get());
+        }
+    }
+
+    public void setTrickAsNotMastered(String trickName, String username){
+        Optional<User> user = userRepository.findByUsername(username);
+        UserProgress userProgress = user.get().getUserProgress();
+        Optional<Trick> trick = trickRepository.findByName(trickName);
+
+        if (userProgress == null) {
+            userProgress = new UserProgress();
+            userProgress.setUser(user.get());
+            user.get().setUserProgress(userProgress);
+            userProgress.setMasteredTricks(new HashSet<>());
+            userProgressRepository.save(userProgress);
+            userRepository.save(user.get());
+        }
+
+        if (trick.isEmpty()) throw new NotFoundException("Trick");
+
+        if (userProgress.getMasteredTricks().contains(trick.get())){
+            userProgress.getMasteredTricks().remove(trick.get());
+            trick.get().getUserProgresses().remove(userProgress);
+
+            userProgressRepository.save(userProgress);
+            trickRepository.save(trick.get());
         }
     }
 

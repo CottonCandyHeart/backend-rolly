@@ -25,7 +25,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
-    public UserResponseDto getUserProfile(User user){
+    public UserResponseDto getUserProfile(String username){
+        User user = userRepository.findByUsername(username).get();
+
         UserResponseDto userResponseDto = new UserResponseDto();
         userResponseDto.setUsername(user.getUsername());
         userResponseDto.setEmail(user.getEmail());
@@ -98,6 +100,8 @@ public class UserService {
         Optional<User> user = userRepository.findByUsername(username);
         user.get().setWeight(userMeasurementsDto.getWeight());
         user.get().setHeight(userMeasurementsDto.getHeight());
+
+        userRepository.save(user.get());
 
         return true;
     }

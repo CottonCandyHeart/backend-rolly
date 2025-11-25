@@ -78,7 +78,7 @@ public class UserServiceUnitTest {
         user.setRoutesCreated(routesCreated);
 
         // When
-        UserResponseDto response = userService.getUserProfile(user);
+        UserResponseDto response = userService.getUserProfile(user.getUsername());
 
         // Then
         assertNotNull(response);
