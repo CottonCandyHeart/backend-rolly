@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface TrickRepository extends JpaRepository<Trick, Long> {
     List<Trick> findTricksByCategory_Name(String category_name);
     Optional<Trick> findByName(String name);
+    List<Trick> findByUserProgresses_Id(Long userProgressId);
 }

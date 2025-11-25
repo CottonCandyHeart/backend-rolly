@@ -103,14 +103,29 @@ public class TrickService {
         }
     }
 
+    public void resetProgress(String username){
+        Optional<User> user = userRepository.findByUsername(username);
+        UserProgress userProgress = user.get().getUserProgress();
+
+        if (userProgress != null) {
+            List<Trick> tricks = trickRepository.findByUserProgresses_Id(userProgress.getId());
+            for (Trick t : tricks){
+                t.getUserProgresses().remove(userProgress);
+                trickRepository.save(t);
+            }
+            userProgress.getMasteredTricks().clear();
+            userProgressRepository.save(userProgress);
+        }
+    }
+
     public List<CategoryDto> getCategories(){
         return categoryRepository.findAll().stream()
                 .map(CategoryDto::new)
                 .toList();
     }
 
-    public boolean addCategory(String name){
-        if (categoryRepository.existsByName(name)){
+    public boolean addCategory(String name) {
+        if (categoryRepository.existsByName(name)) {
             throw new CategoryAlreadyExistsException(name);
         }
         Category category = new Category(name);

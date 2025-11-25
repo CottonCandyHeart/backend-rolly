@@ -23,15 +23,19 @@ public class TrickController {
 
     @PostMapping("/{name}")
     public ResponseEntity<?> setTrickAsMastered(@PathVariable String name, Authentication authentication){
-        System.out.println("MASTERED trick name: [" + name + "]");
         trickService.setTrickAsMastered(name, authentication.getName());
         return new ResponseEntity<>("Trick set as mastered", HttpStatus.OK);
     }
     @PostMapping("/remove/{name}")
     public ResponseEntity<?> setTrickAsNotMastered(@PathVariable String name, Authentication authentication){
-        System.out.println("NOT MASTERED trick name: [" + name + "]");
         trickService.setTrickAsNotMastered(name, authentication.getName());
         return new ResponseEntity<>("Trick set as not mastered", HttpStatus.OK);
+    }
+
+    @PostMapping("/reset")
+    public ResponseEntity<?> resetProgress(Authentication authentication) {
+        trickService.resetProgress(authentication.getName());
+        return new ResponseEntity<>("Reset Progress", HttpStatus.OK);
     }
 
     @GetMapping("/by-cat/{category}")
