@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,7 +51,7 @@ public class RouteServiceUnitTest {
                 user,
                 150
         );
-        route.setDate(LocalDate.of(2025,1,1));
+        route.setDate(LocalDateTime.of(2025,1,1, 0, 0, 0));
     }
 
     @Test
@@ -63,7 +64,7 @@ public class RouteServiceUnitTest {
                 user,
                 150
         );
-        route2.setDate(LocalDate.of(2025,2,2));
+        route2.setDate(LocalDateTime.of(2025,2,2, 0, 0, 0));
         user.getRoutesCreated().add(route2);
 
         when(userRepository.findByUsername("username")).thenReturn(Optional.of(user));
@@ -100,7 +101,7 @@ public class RouteServiceUnitTest {
                 user,
                 150
         );
-        route2.setDate(LocalDate.of(2025,2,2));
+        route2.setDate(LocalDateTime.of(2025,2,2, 0, 0, 0));
         when(
                 routeRepository.getRouteByCreatedByAndDate(
                         user,
@@ -146,7 +147,7 @@ public class RouteServiceUnitTest {
         when(userRepository.findByUsername("username")).thenReturn(Optional.of(user));
 
         // When
-        boolean result = routeService.createRoute(routeDto);
+        boolean result = routeService.createRoute(routeDto, user.getUsername());
 
         // Then
         assertTrue(result);

@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/training")
@@ -19,6 +21,22 @@ public class TrainingPlanController {
     public ResponseEntity<?> getTrainings(Authentication authentication){
         return new ResponseEntity<>(
                 trainingPlanService.getTrainingPlans(authentication.getName()),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/d/{y}-{m}-{d}")
+    public ResponseEntity<?> getTrainingsByDate(@PathVariable int y, @PathVariable int m, @PathVariable int d, Authentication authentication){
+        return new ResponseEntity<>(
+                trainingPlanService.getTrainingPlansByDate(authentication.getName(), y, m, d),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/{y}-{m}")
+    public ResponseEntity<?> getTrainingsByYearAndMonth(@PathVariable int y, @PathVariable int m, Authentication authentication){
+        return new ResponseEntity<>(
+                trainingPlanService.getTrainingPlansByYearAndMonth(authentication.getName(), y, m),
                 HttpStatus.OK
         );
     }

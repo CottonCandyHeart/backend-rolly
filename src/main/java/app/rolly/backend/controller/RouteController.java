@@ -32,8 +32,9 @@ public class RouteController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createRoute(@RequestBody RouteDto routeDto){
-        routeService.createRoute(routeDto);
+    public ResponseEntity<?> createRoute(@RequestBody RouteDto routeDto, Authentication authentication){
+        System.out.println("I am here");
+        routeService.createRoute(routeDto, authentication.getName());
         return new ResponseEntity<>("Route created", HttpStatus.OK);
     }
 

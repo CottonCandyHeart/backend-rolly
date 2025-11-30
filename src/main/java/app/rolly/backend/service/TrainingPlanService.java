@@ -8,6 +8,7 @@ import app.rolly.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,32 @@ public class TrainingPlanService {
         try{
             User user = userRepository.findByUsername(username).get();
             return trainingPlanRepository.findByUser(user).stream()
+                    .map(TrainingPlanDto::new)
+                    .toList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<TrainingPlanDto> getTrainingPlansByDate(String username, int year, int month, int day){
+        try{
+            User user = userRepository.findByUsername(username).get();
+            return trainingPlanRepository.findByUser(user).stream()
+                    .filter(tp -> tp.getDateTime().getYear() == year &&
+                            tp.getDateTime().getMonthValue() == month && tp.getDateTime().getDayOfMonth() == day)
+                    .map(TrainingPlanDto::new)
+                    .toList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<TrainingPlanDto> getTrainingPlansByYearAndMonth(String username, int year, int month){
+        try{
+            User user = userRepository.findByUsername(username).get();
+            return trainingPlanRepository.findByUser(user).stream()
+                    .filter(tp -> tp.getDateTime().getYear() == year &&
+                            tp.getDateTime().getMonthValue() == month)
                     .map(TrainingPlanDto::new)
                     .toList();
         } catch (Exception e) {

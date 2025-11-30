@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,18 +30,53 @@ public class Route {
         this.distance = distance;
         this.estimatedTime = estimatedTime;
         this.createdBy = createdBy;
-        this.date = LocalDate.now();
+        this.date = LocalDateTime.now();
+        this.caloriesBurned = caloriesBurned;
+    }
+
+    public Route(String name, double distance, Duration estimatedTime, User createdBy, LocalDateTime date, int caloriesBurned){
+        this.name = name;
+        this.distance = distance;
+        this.estimatedTime = estimatedTime;
+        this.createdBy = createdBy;
+        this.date = date;
         this.caloriesBurned = caloriesBurned;
     }
 
     public Route(RouteDto routeDto, User createdBy){
+        Duration duration = Duration.ofSeconds(routeDto.getEstimatedTime());
+
+        System.out.println(routeDto.getName());
+        System.out.println(routeDto.getDistance());
+        System.out.println(routeDto.getEstimatedTime());
+        System.out.println(routeDto.getDate());
+        System.out.println(createdBy.getUsername());
+
         this.name = routeDto.getName();
         this.distance = routeDto.getDistance();
-        this.estimatedTime = routeDto.getEstimatedTime();
+        this.estimatedTime = duration;
         this.createdBy = createdBy;
-        this.date = routeDto.getDate();
-        this.points = routeDto.getPoints().stream().map(RoutePoint::new).toList();
-        this.photos = routeDto.getPhotos().stream().map(RoutePhoto::new).toList();
+        this.date = routeDto.getDate() != null ? routeDto.getDate() : LocalDateTime.now();
+
+        if (routeDto.getPoints() == null || routeDto.getPoints().isEmpty())
+            this.points = new ArrayList<>();
+        else
+            this.points = routeDto
+                    .getPoints()
+                    .stream()
+                    .map(RoutePoint::new)
+                    .peek(p -> p.setRoute(this))
+                    .toList();
+
+        if (routeDto.getPhotos() == null || routeDto.getPhotos().isEmpty())
+            this.photos = new ArrayList<>();
+        else
+            this.photos = routeDto
+                    .getPhotos()
+                    .stream()
+                    .map(RoutePhoto::new)
+                    .peek(p -> p.setRoute(this))
+                    .toList();
         this.caloriesBurned = routeDto.getCaloriesBurned();
     }
 
@@ -51,7 +87,7 @@ public class Route {
     @Column(nullable = false)
     private Duration estimatedTime;
     @Column
-    private LocalDate date;
+    private LocalDateTime date;
 
     private int caloriesBurned = 0;
 

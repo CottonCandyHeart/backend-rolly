@@ -10,8 +10,11 @@ import app.rolly.backend.repository.UserRepository;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.OneToMany;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.http.parser.Authorization;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,9 +50,14 @@ public class RouteService {
 
     }
 
-    public boolean createRoute(RouteDto routeDto){
-        Optional<User> user = userRepository.findByUsername(routeDto.getCreatedBy());
+    public boolean createRoute(RouteDto routeDto, String username){
+        Optional<User> user = userRepository.findByUsername(username);
         Route route = new Route(routeDto, user.get());
+        System.out.println(route.getName());
+        System.out.println(route.getDistance());
+        System.out.println(route.getEstimatedTime());
+        System.out.println(route.getDate());
+        System.out.println(route.getCreatedBy());
         routeRepository.save(route);
         return true;
     }
