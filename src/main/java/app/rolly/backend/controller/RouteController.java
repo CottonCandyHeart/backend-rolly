@@ -19,7 +19,7 @@ import java.util.List;
 public class RouteController {
     private final RouteService routeService;
 
-    @GetMapping("/get")
+    @GetMapping("/")
     public ResponseEntity<?> getUserRoutes(Authentication authentication){
         List<RouteDto> routeDtos = routeService.getUserRoute(authentication.getName());
         return new ResponseEntity<>(routeDtos, HttpStatus.OK);
@@ -31,9 +31,14 @@ public class RouteController {
         return new ResponseEntity<>(routeDtos, HttpStatus.OK);
     }
 
+    @GetMapping("/m/{y}-{m}")
+    public ResponseEntity<?> getTrainingsByYearAndMonth(@PathVariable int y, @PathVariable int m, Authentication authentication){
+        List<RouteDto> routeDtos = routeService.getRoutesByYearAndMonth(authentication.getName(), y, m);
+        return new ResponseEntity<>(routeDtos, HttpStatus.OK);
+    }
+
     @PostMapping("/create")
     public ResponseEntity<?> createRoute(@RequestBody RouteDto routeDto, Authentication authentication){
-        System.out.println("I am here");
         routeService.createRoute(routeDto, authentication.getName());
         return new ResponseEntity<>("Route created", HttpStatus.OK);
     }

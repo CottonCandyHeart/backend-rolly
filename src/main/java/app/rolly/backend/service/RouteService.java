@@ -1,6 +1,7 @@
 package app.rolly.backend.service;
 
 import app.rolly.backend.dto.RouteDto;
+import app.rolly.backend.dto.TrainingPlanDto;
 import app.rolly.backend.model.Route;
 import app.rolly.backend.model.RoutePhoto;
 import app.rolly.backend.model.RoutePoint;
@@ -16,9 +17,11 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +50,17 @@ public class RouteService {
         } catch (Exception e){
             return null;
         }
+    }
 
+    public List<RouteDto> getRoutesByYearAndMonth(String username, int year, int month){
+        LocalDateTime start = LocalDate.of(year, month, 1).atStartOfDay();
+        LocalDateTime end = start.plusMonths(1);
+
+        List<Route> routes = routeRepository.findRoutesByUserAndMonth(username, start, end);
+
+        return routes.stream()
+                .map(RouteDto::new)
+                .collect(Collectors.toList());
     }
 
     public boolean createRoute(RouteDto routeDto, String username){
@@ -61,8 +74,5 @@ public class RouteService {
         routeRepository.save(route);
         return true;
     }
-
-
-
 
 }
