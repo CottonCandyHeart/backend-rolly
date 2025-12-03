@@ -1,6 +1,7 @@
 package app.rolly.backend.model;
 
 import app.rolly.backend.dto.TrainingPlanDto;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

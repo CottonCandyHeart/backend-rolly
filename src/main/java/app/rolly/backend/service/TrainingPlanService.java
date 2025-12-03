@@ -106,6 +106,7 @@ public class TrainingPlanService {
         if (isPresent.get().isCompleted() == bool) return false;
 
         isPresent.get().setCompleted(bool);
+        trainingPlanRepository.save(isPresent.get());
         return true;
     }
 }
