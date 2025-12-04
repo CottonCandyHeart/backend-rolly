@@ -33,6 +33,8 @@ public class NotificationService {
         Notification notification = new Notification(notificationDto, user);
         notificationRepository.save(notification);
         user.getNotifications().add(notification);
+        userRepository.save(user);
+
         return true;
     }
 
@@ -43,6 +45,16 @@ public class NotificationService {
         if (notification.get().isRead()) return false;
 
         notification.get().setRead(true);
+        notificationRepository.save(notification.get());
+
+        return true;
+    }
+
+    public boolean removeNotification(Long id){
+        Optional<Notification> notification = notificationRepository.findById(id);
+        if (notification.isEmpty()) return false;
+        notificationRepository.removeById(id);
+
         return true;
     }
 }

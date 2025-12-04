@@ -85,6 +85,8 @@ public class TrainingPlanService {
         trainingPlan.setTargetDuration(trainingPlanDto.getTargetDuration());
         trainingPlan.setNotes(trainingPlanDto.getNotes());
 
+        trainingPlanRepository.save(trainingPlan);
+
         return true;
     }
 

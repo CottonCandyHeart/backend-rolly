@@ -25,6 +25,7 @@ public class NotificationController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addNotification(@RequestBody NotificationDto notificationDto, Authentication authentication){
+        System.out.println(authentication.getName());
         if (notificationService.addNotification(notificationDto, authentication.getName())){
             return new ResponseEntity<>("Notification added", HttpStatus.OK);
         }
@@ -40,5 +41,12 @@ public class NotificationController {
         return new ResponseEntity<>("Failed: cannot mark notification as read", HttpStatus.BAD_REQUEST);
     }
 
+    @PostMapping("/remove/{id}")
+    public ResponseEntity<?> removeNotification(@PathVariable Long id){
+        if (notificationService.removeNotification(id)) {
+            return new ResponseEntity<>("Notification removed", HttpStatus.OK);
+        }
 
+        return new ResponseEntity<>("Failed: removing notification", HttpStatus.BAD_REQUEST);
+    }
 }
