@@ -18,11 +18,11 @@ import java.util.NoSuchElementException;
 public class EventController {
     private final EventService eventService;
 
-    @PostMapping("/event")
+    @PostMapping("/")
     public ResponseEntity<?> createEvent(@RequestBody EventDto eventDto, Authentication authentication){
 
         if (eventDto.getAction().equals("create")){
-            if (eventService.createEvent(eventDto)) {
+            if (eventService.createEvent(eventDto, authentication.getName())) {
                 return new ResponseEntity<>("Event created", HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("Failed creating event", HttpStatus.BAD_REQUEST);
@@ -45,18 +45,45 @@ public class EventController {
 
     }
 
-    @GetMapping("/participants")
-    public ResponseEntity<?> showNumberOfParticipants(EventDto eventDto){
-        return new ResponseEntity<>(eventService.getNumberOfParticipants(eventDto), HttpStatus.OK);
+    @GetMapping("/participants/{name}")
+    public ResponseEntity<?> showNumberOfParticipants(@PathVariable String name){
+        return new ResponseEntity<>(eventService.getNumberOfParticipants(name), HttpStatus.OK);
     }
 
-    @GetMapping("/{city}")
+    @GetMapping("/c")
+    public ResponseEntity<?> getCities(){
+        return new ResponseEntity<>(eventService.getCities(), HttpStatus.OK);
+    }
+
+    @GetMapping("/c/{city}")
     public ResponseEntity<?> showEventsByCity(@PathVariable String city){
         return new ResponseEntity<>(eventService.getEventsByCity(city), HttpStatus.OK);
     }
 
-    @GetMapping("/{Y}-{m}-{d}")
+    @GetMapping("/c/{city}/up")
+    public ResponseEntity<?> showUpcomingsEventsByCity(@PathVariable String city){
+        return new ResponseEntity<>(eventService.getUpcomingEventsByCity(city), HttpStatus.OK);
+    }
+
+    @GetMapping("/d/{Y}-{m}-{d}")
     public ResponseEntity<?> showEventsByDate(@PathVariable int Y, @PathVariable int m, @PathVariable int d){
         return new ResponseEntity<>(eventService.getEventsByDate(LocalDate.of(Y,m,d)), HttpStatus.OK);
+    }
+
+    @GetMapping("/u")
+    public ResponseEntity<?> showUserEvents(Authentication authentication){
+        return new ResponseEntity<>(eventService.getUserEvents(authentication.getName()), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/del/{name}")
+    public ResponseEntity<?> deleteEvent(@PathVariable String name, Authentication authentication){
+        System.out.println("Trying to delete event: " + name + " by user: " + authentication.getName());
+        boolean deleted = eventService.deleteEvent(name, authentication.getName());
+        System.out.println("Deleted? " + deleted);
+
+        if (deleted) {
+            return new ResponseEntity<>("Event deleted successfully", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Cannot delete event", HttpStatus.BAD_REQUEST);
     }
 }

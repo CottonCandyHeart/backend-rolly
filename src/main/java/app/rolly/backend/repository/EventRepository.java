@@ -23,4 +23,13 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             LocalTime time,
             Location location
     );
+    List<Event> findByCityAndDateGreaterThanEqualOrderByDateAscTimeAsc(String city, LocalDate date);
+
+    List<Event> findEventsByOrganizer(User organizer);
+
+    Optional<Event> findEventsByName(String name);
+
+    List<Event> readEventByName(String name);
+
+    void removeEventByName(String name);
 }

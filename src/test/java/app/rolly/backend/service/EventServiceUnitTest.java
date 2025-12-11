@@ -58,6 +58,8 @@ public class EventServiceUnitTest {
                 1.1
         );
         event = new Event(
+                "event",
+                "lorem ipsum",
                 user,
                 LocalDate.of(2025,1,1),
                 LocalTime.of(1,1,1),
@@ -77,7 +79,7 @@ public class EventServiceUnitTest {
         when(locationRepository.findByName("location")).thenReturn(Optional.of(location));
 
         // When
-        boolean result = eventService.createEvent(eventDto);
+        boolean result = eventService.createEvent(eventDto, "user");
 
         // Then
         assertTrue(result);
@@ -91,7 +93,7 @@ public class EventServiceUnitTest {
         when(locationRepository.findByName("location")).thenReturn(Optional.of(location));
 
         // When
-        boolean result = eventService.createEvent(eventDto);
+        boolean result = eventService.createEvent(eventDto, "user");
 
         // Then
         assertFalse(result);
@@ -105,7 +107,7 @@ public class EventServiceUnitTest {
         when(locationRepository.findByName("location")).thenReturn(Optional.empty());
 
         // When
-        boolean result = eventService.createEvent(eventDto);
+        boolean result = eventService.createEvent(eventDto, "user");
 
         // Then
         assertFalse(result);
@@ -297,7 +299,7 @@ public class EventServiceUnitTest {
         )).thenReturn(Optional.of(event));
 
         // When
-        int result = eventService.getNumberOfParticipants(eventDto);
+        int result = eventService.getNumberOfParticipants("event");
 
         // Then
         assertEquals(2, result);
@@ -317,7 +319,7 @@ public class EventServiceUnitTest {
         )).thenReturn(Optional.of(event));
 
         // When
-        int result = eventService.getNumberOfParticipants(eventDto);
+        int result = eventService.getNumberOfParticipants("event");
 
         // Then
         assertEquals(0, result);

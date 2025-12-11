@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/location")
+@RequestMapping(value = "/locations")
 @RequiredArgsConstructor
 public class LocationController {
     private final LocationService locationService;
@@ -18,12 +18,17 @@ public class LocationController {
         return new ResponseEntity<>(locationService.getLocation(name), HttpStatus.OK);
     }
 
+    @GetMapping("/")
+    public ResponseEntity<?> getLocationList(){
+        return new ResponseEntity<>(locationService.getLocationList(), HttpStatus.OK);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<?> addLocation(@RequestBody LocationDto locationDto){
         if (locationService.addLocation(locationDto)) {
             return new ResponseEntity<>("Location added successfully", HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("Cannot add location", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Location already exists", HttpStatus.BAD_REQUEST);
         }
     }
 

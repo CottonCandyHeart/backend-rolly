@@ -6,6 +6,8 @@ import app.rolly.backend.repository.LocationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.swing.*;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -65,6 +67,12 @@ public class LocationService {
         }
 
         return new LocationDto(location.get());
+    }
+
+    public List<LocationDto> getLocationList(){
+        return locationRepository.findAll().stream()
+                .map(LocationDto::new)
+                .toList();
     }
 
 }

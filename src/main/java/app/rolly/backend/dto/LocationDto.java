@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class LocationDto {
+    private Long id;
     private String name;
     private String city;
     private String country;
@@ -16,6 +17,7 @@ public class LocationDto {
     private double longitude;
 
     public LocationDto(Location location){
+        this.id = location.getId();
         this.name = location.getName();
         this.city = location.getCity();
         this.country = location.getCountry();

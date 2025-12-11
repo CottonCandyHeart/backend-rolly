@@ -20,7 +20,9 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public Event(User organizer, LocalDate date, LocalTime time, String level, String type, String age, int numOfParticipants, Location location){
+    public Event(String name, String description, User organizer, LocalDate date, LocalTime time, String level, String type, String age, int numOfParticipants, Location location){
+        this.name = name;
+        this.description = description;
         this.organizer = organizer;
         this.date = date;
         this.time = time;
@@ -29,10 +31,14 @@ public class Event {
         this.age = age;
         this.numOfParticipants = numOfParticipants;
         this.location = location;
-        this.city = this.location.getCity();
+        this.city = this.location.getCity().toUpperCase();
 
     }
 
+    @Column(nullable = false)
+    private String name;
+    @Column(nullable = false)
+    private String description;
     @Column(nullable = false)
     private LocalDate date;
     @Column(nullable = false)
