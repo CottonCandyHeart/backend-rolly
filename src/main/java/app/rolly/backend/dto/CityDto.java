@@ -1,6 +1,7 @@
 package app.rolly.backend.dto;
 
 import app.rolly.backend.model.City;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,6 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@EqualsAndHashCode(of = "city")
 public class CityDto {
     private Long id;
     private String city;

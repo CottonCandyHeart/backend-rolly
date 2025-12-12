@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -62,11 +63,14 @@ public class EventService {
         return true;
     }
 
+    @Transactional
     public boolean joinEvent(EventDto eventDto, String username){
-        User user = userRepository.findByUsername(username).get();
         Optional<Event> event;
         Optional<User> organizer = userRepository.findByUsername(eventDto.getOrganizerUsername());
+        Optional<User> user = userRepository.findByUsername(username);
         Optional<Location> location = locationRepository.findByName(eventDto.getLocationName());
+
+        if (user.get().getUsername().equals(organizer.get().getUsername())) return false;
 
         event = eventRepository.findByOrganizerAndDateAndTimeAndLocation(
                     organizer.get(),
@@ -78,15 +82,18 @@ public class EventService {
         if (event.isEmpty()) throw new NotFoundException("Event");
 
         if (event.get().getAttendee().size() < event.get().getNumOfParticipants()) {
-            if (event.get().getAttendee().contains(user)){
+            if (event.get().getAttendee().contains(user.get())){
                 return false;
             }
-            event.get().getAttendee().add(user);
-        } else {
-            return false;
+            user.get().getAttendedEvents().add(event.get());
+            userRepository.save(user.get());
+            event.get().getAttendee().add(user.get());
+            eventRepository.save(event.get());
+
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     public boolean leaveEvent(EventDto eventDto, String username){
@@ -128,7 +135,8 @@ public class EventService {
     }
 
     public List<EventDto> getUpcomingEventsByCity(String city){
-        List<Event> events = eventRepository.findByCityAndDateGreaterThanEqualOrderByDateAscTimeAsc(city, LocalDate.now());
+        List<Event> events = eventRepository.getUpcomingEventsByCity(city.toUpperCase(), LocalDate.now());
+        System.out.println(events.size());
         return events.stream()
                 .map(EventDto::new)
                 .toList();
@@ -140,10 +148,10 @@ public class EventService {
                 .toList();
     }
 
-    public List<CityDto> getCities(){
+    public Set<CityDto> getCities(){
         return cityRepository.findAll().stream()
                 .map(CityDto::new)
-                .toList();
+                .collect(Collectors.toSet());
     }
 
     public List<EventDto> getUserEvents(String username){
@@ -177,5 +185,17 @@ public class EventService {
 
         eventRepository.removeEventByName(name);
         return true;
+    }
+
+    public boolean checkOwner(String name, String username){
+        Optional<Event> event = eventRepository.findEventsByName(name);
+        Optional<User> organizer = userRepository.findByUsername(event.get().getOrganizer().getUsername());
+        Optional<User> user = userRepository.findByUsername(username);
+
+        System.out.println(user.get().getUsername().equals(organizer.get().getUsername()));
+
+        if (user.get().getUsername().equals(organizer.get().getUsername())) return true;
+
+        return false;
     }
 }

@@ -77,13 +77,16 @@ public class EventController {
 
     @DeleteMapping("/del/{name}")
     public ResponseEntity<?> deleteEvent(@PathVariable String name, Authentication authentication){
-        System.out.println("Trying to delete event: " + name + " by user: " + authentication.getName());
         boolean deleted = eventService.deleteEvent(name, authentication.getName());
-        System.out.println("Deleted? " + deleted);
 
         if (deleted) {
             return new ResponseEntity<>("Event deleted successfully", HttpStatus.OK);
         }
         return new ResponseEntity<>("Cannot delete event", HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/check/{name}")
+    public ResponseEntity<?> checkOwner(@PathVariable String name, Authentication authentication){
+        return new ResponseEntity<>(eventService.checkOwner(name, authentication.getName()), HttpStatus.OK);
     }
 }

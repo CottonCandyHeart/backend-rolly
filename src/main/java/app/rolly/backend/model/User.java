@@ -45,7 +45,7 @@ public class User {
     @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Event> organizedEvents = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "events_attended",
             joinColumns = @JoinColumn(name = "user_id"),
