@@ -41,9 +41,9 @@ public class NotificationController {
         return new ResponseEntity<>("Failed: cannot mark notification as read", HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/remove/{id}")
-    public ResponseEntity<?> removeNotification(@PathVariable Long id){
-        if (notificationService.removeNotification(id)) {
+    @DeleteMapping("/remove")
+    public ResponseEntity<?> removeNotification(@RequestBody NotificationDto notificationDto, Authentication authentication){
+        if (notificationService.removeNotification(notificationDto, authentication.getName())) {
             return new ResponseEntity<>("Notification removed", HttpStatus.OK);
         }
 

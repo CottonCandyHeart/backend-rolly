@@ -11,15 +11,12 @@ import app.rolly.backend.repository.CityRepository;
 import app.rolly.backend.repository.EventRepository;
 import app.rolly.backend.repository.LocationRepository;
 import app.rolly.backend.repository.UserRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -96,11 +93,14 @@ public class EventService {
         return false;
     }
 
+    @Transactional
     public boolean leaveEvent(EventDto eventDto, String username){
+        System.out.println("Entered leaveEvent");
         User user = userRepository.findByUsername(username).get();
         Optional<Event> event;
         Optional<User> organizer = userRepository.findByUsername(eventDto.getOrganizerUsername());
         Optional<Location> location = locationRepository.findByName(eventDto.getLocationName());
+        System.out.println("Found objects");
 
         event = eventRepository.findByOrganizerAndDateAndTimeAndLocation(
                 organizer.get(),
@@ -108,11 +108,17 @@ public class EventService {
                 eventDto.getTime(),
                 location.get()
         );
+        System.out.println("Found event");
 
         if (event.isEmpty()) throw new NotFoundException("Event");
 
         if (event.get().getAttendee().contains(user)) {
+            System.out.println("Entered if");
             event.get().getAttendee().remove(user);
+            user.getAttendedEvents().remove(event.get());
+
+            userRepository.save(user);
+            eventRepository.save(event.get());
         } else {
             return false;
         }
@@ -134,10 +140,24 @@ public class EventService {
                 .toList();
     }
 
+    public List<EventDto> getEvents(){
+        return eventRepository.findAll().stream()
+                .map(EventDto::new)
+                .toList();
+    }
+
     public List<EventDto> getUpcomingEventsByCity(String city){
         List<Event> events = eventRepository.getUpcomingEventsByCity(city.toUpperCase(), LocalDate.now());
         System.out.println(events.size());
         return events.stream()
+                .map(EventDto::new)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<EventDto> getEventsByUser(String username){
+        Optional<User> user = userRepository.findByUsername(username);
+        return user.get().getAttendedEvents().stream()
                 .map(EventDto::new)
                 .toList();
     }
@@ -177,11 +197,13 @@ public class EventService {
             return false;
         }
 
-        Set<User> att = event.getAttendee();
+        Set<User> att = new HashSet<>(event.getAttendee());
         for (User u : att){
             u.getAttendedEvents().remove(event);
             userRepository.save(u);
         }
+
+        event.getAttendee().clear();
 
         eventRepository.removeEventByName(name);
         return true;
@@ -195,6 +217,15 @@ public class EventService {
         System.out.println(user.get().getUsername().equals(organizer.get().getUsername()));
 
         if (user.get().getUsername().equals(organizer.get().getUsername())) return true;
+
+        return false;
+    }
+
+    public boolean checkAttendee(String name, String username){
+        Optional<Event> event = eventRepository.findEventsByName(name);
+        Optional<User> user = userRepository.findByUsername(username);
+
+        if (event.get().getAttendee().contains(user.get())) return true;
 
         return false;
     }

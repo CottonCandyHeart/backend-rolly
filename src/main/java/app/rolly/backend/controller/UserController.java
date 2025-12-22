@@ -43,17 +43,21 @@ public class UserController {
     }
 
     @PostMapping("/remove")
-    public ResponseEntity<?> removeUser(@RequestBody Long id, Authentication authentication){
+    public ResponseEntity<?> removeUser(@RequestBody UserResponseDto userResponseDto, Authentication authentication){
         String admin = authentication.getName();
+        System.out.println(userResponseDto.getUsername());
 
         if (!admin.equals("admin")) {
+            System.out.println("admin if");
             return new ResponseEntity<>("Illegal role", HttpStatus.UNAUTHORIZED);
         }
 
-        if (userService.removeUser(id)){
+        if (!userService.removeUser(userResponseDto.getUsername())){
+            System.out.println("username if");
             return new ResponseEntity<>("User doesn't exist", HttpStatus.BAD_REQUEST);
         }
 
+        System.out.println("its fine");
         return new ResponseEntity<>("User removed", HttpStatus.OK);
     }
 

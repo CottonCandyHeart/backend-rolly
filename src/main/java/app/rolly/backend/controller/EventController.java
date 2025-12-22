@@ -20,6 +20,7 @@ public class EventController {
 
     @PostMapping("/")
     public ResponseEntity<?> createEvent(@RequestBody EventDto eventDto, Authentication authentication){
+        System.out.println("Request received: " + eventDto.getAction());
 
         if (eventDto.getAction().equals("create")){
             if (eventService.createEvent(eventDto, authentication.getName())) {
@@ -34,7 +35,9 @@ public class EventController {
                 return new ResponseEntity<>("Failed joining event", HttpStatus.BAD_REQUEST);
             }
         } else if (eventDto.getAction().equals("leave")) {
+            System.out.println("Entered if 1");
             if (eventService.leaveEvent(eventDto, authentication.getName())) {
+                System.out.println("Entered if 2");
                 return new ResponseEntity<>("Left event", HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("Failed leaving event", HttpStatus.BAD_REQUEST);
@@ -46,13 +49,18 @@ public class EventController {
     }
 
     @GetMapping("/participants/{name}")
-    public ResponseEntity<?> showNumberOfParticipants(@PathVariable String name){
+    public ResponseEntity<?> showNumberOfParticipants(@PathVariable String name) {
         return new ResponseEntity<>(eventService.getNumberOfParticipants(name), HttpStatus.OK);
     }
 
     @GetMapping("/c")
     public ResponseEntity<?> getCities(){
         return new ResponseEntity<>(eventService.getCities(), HttpStatus.OK);
+    }
+
+    @GetMapping("/get/all")
+    public ResponseEntity<?> getAllEvents(){
+        return new ResponseEntity<>(eventService.getEvents(), HttpStatus.OK);
     }
 
     @GetMapping("/c/{city}")
@@ -63,6 +71,11 @@ public class EventController {
     @GetMapping("/c/{city}/up")
     public ResponseEntity<?> showUpcomingsEventsByCity(@PathVariable String city){
         return new ResponseEntity<>(eventService.getUpcomingEventsByCity(city), HttpStatus.OK);
+    }
+
+    @GetMapping("/up")
+    public ResponseEntity<?> showUpcomingsEventsByUser(Authentication authentication){
+        return new ResponseEntity<>(eventService.getEventsByUser(authentication.getName()), HttpStatus.OK);
     }
 
     @GetMapping("/d/{Y}-{m}-{d}")
@@ -88,5 +101,10 @@ public class EventController {
     @GetMapping("/check/{name}")
     public ResponseEntity<?> checkOwner(@PathVariable String name, Authentication authentication){
         return new ResponseEntity<>(eventService.checkOwner(name, authentication.getName()), HttpStatus.OK);
+    }
+
+    @GetMapping("/check/at/{name}")
+    public ResponseEntity<?> checkAttendee(@PathVariable String name, Authentication authentication){
+        return new ResponseEntity<>(eventService.checkAttendee(name, authentication.getName()), HttpStatus.OK);
     }
 }

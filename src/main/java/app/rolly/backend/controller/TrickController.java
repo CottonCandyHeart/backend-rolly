@@ -3,6 +3,7 @@ package app.rolly.backend.controller;
 import app.rolly.backend.dto.CategoryDto;
 import app.rolly.backend.dto.TrickDto;
 import app.rolly.backend.model.User;
+import app.rolly.backend.repository.TrickRepository;
 import app.rolly.backend.service.TrickService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,12 @@ public class TrickController {
         trickService.setTrickAsMastered(name, authentication.getName());
         return new ResponseEntity<>("Trick set as mastered", HttpStatus.OK);
     }
+
+    @GetMapping("/get-all")
+    public ResponseEntity<?> getAllTricks(){
+        return new ResponseEntity<>(trickService.getAllTricks(), HttpStatus.OK);
+    }
+
     @PostMapping("/remove/{name}")
     public ResponseEntity<?> setTrickAsNotMastered(@PathVariable String name, Authentication authentication){
         trickService.setTrickAsNotMastered(name, authentication.getName());
@@ -52,5 +59,32 @@ public class TrickController {
     public ResponseEntity<?> addCategory(@RequestBody CategoryDto categoryDto){
         trickService.addCategory(categoryDto.getName());
         return new ResponseEntity<>("Category added successfully", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/del-category/{name}")
+    public ResponseEntity<?> deleteCategory(@PathVariable String name){
+        if (trickService.deleteCategory(name)){
+            return new ResponseEntity<>("Deleted category", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Failed deleting category", HttpStatus.OK);
+    }
+
+    @PostMapping("/add-trick")
+    public ResponseEntity<?> addTrick(@RequestBody TrickDto trickDto){
+        trickService.addTrick(trickDto);
+        return new ResponseEntity<>("Trick added successfully", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/del-trick/{name}")
+    public ResponseEntity<?> deleteTrick(@PathVariable String name){
+        if (trickService.deleteTrick(name)){
+            return new ResponseEntity<>("Deleted trick", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Failed deleting trick", HttpStatus.OK);
+    }
+
+    @GetMapping("/progress")
+    public ResponseEntity<?> getProgress(Authentication authentication){
+        return new ResponseEntity<>(trickService.getProgress(authentication.getName()),HttpStatus.OK);
     }
 }

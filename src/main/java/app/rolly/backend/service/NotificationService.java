@@ -50,10 +50,18 @@ public class NotificationService {
         return true;
     }
 
-    public boolean removeNotification(Long id){
-        Optional<Notification> notification = notificationRepository.findById(id);
+    public boolean removeNotification(NotificationDto notificationDto, String username){
+        Optional<User> user = userRepository.findByUsername(username);
+        Optional<Notification> notification = notificationRepository.findByTitleAndMessageAndSentAtAndReadAndRecipient(
+                notificationDto.getTitle(),
+                notificationDto.getMessage(),
+                notificationDto.getSentAt(),
+                notificationDto.isRead(),
+                user.get()
+        );
+
         if (notification.isEmpty()) return false;
-        notificationRepository.removeById(id);
+        notificationRepository.removeById(notification.get().getId());
 
         return true;
     }

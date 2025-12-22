@@ -26,4 +26,13 @@ public class TrickDto {
         this.description = trick.getDescription();
         this.isMastered = trick.getUserProgresses().contains(userProgress);
     }
+
+    public TrickDto(Trick trick){
+        this.categoryName = trick.getCategory().getName();
+        this.trickName = trick.getName();
+        this.link = trick.getLink();
+        this.leg = trick.getLeg();
+        this.description = trick.getDescription();
+        this.isMastered = false;
+    }
 }

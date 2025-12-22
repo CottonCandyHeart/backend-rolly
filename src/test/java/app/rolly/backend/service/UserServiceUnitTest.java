@@ -168,7 +168,7 @@ public class UserServiceUnitTest {
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
 
         // When
-        boolean result = userService.removeUser(user.getId());
+        boolean result = userService.removeUser(user.getUsername());
 
         // Then
         assertTrue(result);
@@ -180,7 +180,7 @@ public class UserServiceUnitTest {
         when(userRepository.findById(user.getId())).thenReturn(Optional.empty());
 
         // When
-        boolean result = userService.removeUser(user.getId());
+        boolean result = userService.removeUser(user.getUsername());
 
         // Then
         assertFalse(result);

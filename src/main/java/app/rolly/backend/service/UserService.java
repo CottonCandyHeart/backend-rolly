@@ -4,14 +4,18 @@ import app.rolly.backend.dto.*;
 import app.rolly.backend.exception.GlobalExceptionHandler;
 import app.rolly.backend.exception.NotFoundException;
 import app.rolly.backend.exception.WrongPasswordException;
+import app.rolly.backend.model.Event;
 import app.rolly.backend.model.Role;
 import app.rolly.backend.model.User;
 import app.rolly.backend.repository.RoleRepository;
 import app.rolly.backend.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Optional;
@@ -24,6 +28,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final EventService eventService;
 
     public UserResponseDto getUserProfile(String username){
         User user = userRepository.findByUsername(username).get();
@@ -87,12 +92,24 @@ public class UserService {
         userRepository.save(user.get());
     }
 
-    public boolean removeUser(Long id){
-        Optional<User> user = userRepository.findById(id);
+    @Transactional
+    public boolean removeUser(String username){
+        username = username.trim();
+        System.out.println(">" + username + "<");
+        System.out.println("length = " + username.length());
+        Optional<User> user = userRepository.findByUsername(username);
+
+        System.out.println(user.isEmpty());
 
         if (user.isEmpty()) return false;
 
-        userRepository.removeUserById(id);
+        List<Event> organizedEvents = new ArrayList<>(user.get().getOrganizedEvents());
+
+        for (Event e : organizedEvents) {
+            eventService.deleteEvent(e.getName(), username);
+        }
+
+        userRepository.removeUserById(user.get().getId());
         return true;
     }
 

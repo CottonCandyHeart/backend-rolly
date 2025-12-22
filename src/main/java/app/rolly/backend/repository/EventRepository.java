@@ -38,4 +38,5 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> readEventByName(String name);
 
     void removeEventByName(String name);
+
 }

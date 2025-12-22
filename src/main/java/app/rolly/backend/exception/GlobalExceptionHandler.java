@@ -34,6 +34,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(TrickAlreadyExistsException.class)
+    public ResponseEntity<String> trickAlreadyExists(CategoryAlreadyExistsException e){
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+    }
+
     // Default
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGenericException(Exception e) {
