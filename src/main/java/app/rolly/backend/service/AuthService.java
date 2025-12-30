@@ -21,7 +21,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
 
-    public void registerUser(UserDto userDto) {
+    public boolean registerUser(UserDto userDto) {
         System.out.println("Checking username: " + userDto.getUsername());
         System.out.println("Found user: " + userRepository.findByUsername(userDto.getUsername()));
         if (userRepository.findByUsername(userDto.getUsername()).isPresent()){
@@ -43,6 +43,8 @@ public class AuthService {
                     role.get()
                 )
         );
+
+        return true;
     }
 
 }

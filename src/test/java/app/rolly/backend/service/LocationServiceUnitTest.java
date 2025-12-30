@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -171,5 +172,27 @@ public class LocationServiceUnitTest {
 
         // Then
         assertFalse(result);
+    }
+
+    @Test
+    void shouldReturnLocationDtoList(){
+        // Given
+        Location newLocation = new Location(
+                "newLocation",
+                "newCity",
+                "newCountry",
+                2.2,
+                3.3
+        );
+
+        when(locationRepository.findAll()).thenReturn(List.of(location, newLocation));
+
+        // When
+        List<LocationDto> result = locationService.getLocationList();
+
+        // Then
+        assertEquals(2, result.size());
+        assertEquals(location.getName(), result.getFirst().getName());
+        assertEquals(newLocation.getName(), result.getLast().getName());
     }
 }

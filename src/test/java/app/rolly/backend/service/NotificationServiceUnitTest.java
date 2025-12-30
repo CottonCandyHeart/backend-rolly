@@ -113,4 +113,44 @@ public class NotificationServiceUnitTest {
         // Then
         assertFalse(result);
     }
+
+    @Test
+    void shouldReturnFalseForRemovingNonExistingNotification(){
+        // Given
+        NotificationDto notificationDto = new NotificationDto(n1);
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        when(notificationRepository.findByTitleAndMessageAndSentAtAndReadAndRecipient(
+                n1.getTitle(),
+                n1.getMessage(),
+                n1.getSentAt(),
+                n1.isRead(),
+                user
+        )).thenReturn(Optional.empty());
+
+        // When
+        boolean result = notificationService.removeNotification(notificationDto, user.getUsername());
+
+        // Then
+        assertFalse(result);
+    }
+
+    @Test
+    void shouldRemoveNotificationSuccessfully(){
+        // Given
+        NotificationDto notificationDto = new NotificationDto(n1);
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        when(notificationRepository.findByTitleAndMessageAndSentAtAndReadAndRecipient(
+                n1.getTitle(),
+                n1.getMessage(),
+                n1.getSentAt(),
+                n1.isRead(),
+                user
+        )).thenReturn(Optional.of(n1));
+
+        // When
+        boolean result = notificationService.removeNotification(notificationDto, user.getUsername());
+
+        // Then
+        assertTrue(result);
+    }
 }

@@ -312,4 +312,69 @@ public class TrainingPlanServiceUnitTest {
         assertFalse(result);
     }
 
+    @Test
+    void shouldReturnTrainingPlansForSpecificDate() {
+        // Given
+        TrainingPlan trainingPlan2 = new TrainingPlan(
+                LocalDateTime.of(2025,2,1,1,1,1),
+                60,
+                "new note",
+                false,
+                user
+        );
+
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
+
+        when(trainingPlanRepository.findByUser(user))
+                .thenReturn(List.of(trainingPlan, trainingPlan2));
+
+        // When
+        List<TrainingPlanDto> result =
+                trainingPlanService.getTrainingPlansByDate(user.getUsername(), 2025, 1, 1);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(1, result.get(0).getDateTime().getMonthValue());
+    }
+
+    @Test
+    void shouldReturnNullWhenUserNotFoundForDate() {
+        // Given
+        when(userRepository.findByUsername(user.getUsername()))
+                .thenReturn(Optional.empty());
+
+        // When
+        List<TrainingPlanDto> result =
+                trainingPlanService.getTrainingPlansByDate(user.getUsername(), 2025, 1, 1);
+
+        // Then
+        assertNull(result);
+    }
+
+    @Test
+    void shouldReturnTrainingPlansForYearAndMonth() {
+        // Given
+        TrainingPlan trainingPlan2 = new TrainingPlan(
+                LocalDateTime.of(2025,2,1,1,1,1),
+                60,
+                "new note",
+                false,
+                user
+        );
+
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        when(trainingPlanRepository.findByUser(user)).thenReturn(List.of(trainingPlan, trainingPlan2));
+
+        // When
+        List<TrainingPlanDto> result =
+                trainingPlanService.getTrainingPlansByYearAndMonth(user.getUsername(), 2025, 2);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertTrue(result.stream().allMatch(tp -> tp.getDateTime().getMonthValue() == 2));
+    }
+
+
 }

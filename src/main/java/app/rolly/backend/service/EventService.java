@@ -214,8 +214,6 @@ public class EventService {
         Optional<User> organizer = userRepository.findByUsername(event.get().getOrganizer().getUsername());
         Optional<User> user = userRepository.findByUsername(username);
 
-        System.out.println(user.get().getUsername().equals(organizer.get().getUsername()));
-
         if (user.get().getUsername().equals(organizer.get().getUsername())) return true;
 
         return false;

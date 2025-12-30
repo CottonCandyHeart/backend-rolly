@@ -90,15 +90,6 @@ public class TrickService {
         UserProgress userProgress = user.get().getUserProgress();
         Optional<Trick> trick = trickRepository.findByName(trickName);
 
-        if (userProgress == null) {
-            userProgress = new UserProgress();
-            userProgress.setUser(user.get());
-            user.get().setUserProgress(userProgress);
-            userProgress.setMasteredTricks(new HashSet<>());
-            userProgressRepository.save(userProgress);
-            userRepository.save(user.get());
-        }
-
         if (trick.isEmpty()) throw new NotFoundException("Trick");
 
         if (userProgress.getMasteredTricks().contains(trick.get())){
@@ -160,7 +151,7 @@ public class TrickService {
         return true;
     }
 
-    public void addTrick(TrickDto trickDto){
+    public boolean addTrick(TrickDto trickDto){
         if (trickRepository.existsByName(trickDto.getTrickName())) {
             throw new TrickAlreadyExistsException(trickDto.getTrickName());
         }
@@ -175,6 +166,8 @@ public class TrickService {
                 trickDto.getDescription()
         );
         trickRepository.save(trick);
+
+        return true;
     }
 
     @Transactional
@@ -222,4 +215,6 @@ public class TrickService {
 
         return categoryProgressDtos;
     }
+
+
 }

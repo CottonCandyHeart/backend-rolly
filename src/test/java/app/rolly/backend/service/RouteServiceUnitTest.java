@@ -4,6 +4,7 @@ import app.rolly.backend.dto.RouteDto;
 import app.rolly.backend.model.Role;
 import app.rolly.backend.model.Route;
 import app.rolly.backend.model.User;
+import app.rolly.backend.model.UserProgress;
 import app.rolly.backend.repository.RouteRepository;
 import app.rolly.backend.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -144,6 +145,7 @@ public class RouteServiceUnitTest {
     void shouldCreateRouteSuccessfully(){
         // Given
         RouteDto routeDto = new RouteDto(route);
+        user.setUserProgress(new UserProgress());
         when(userRepository.findByUsername("username")).thenReturn(Optional.of(user));
 
         // When
@@ -151,6 +153,25 @@ public class RouteServiceUnitTest {
 
         // Then
         assertTrue(result);
+    }
+
+    @Test
+    void shouldReturnRouteDtoListForGivenYearAndMonth(){
+        // Given
+        LocalDateTime start = LocalDate.of(route.getDate().getYear(), route.getDate().getMonthValue(), 1).atStartOfDay();
+        LocalDateTime end = start.plusMonths(1);
+
+        when(routeRepository.findRoutesByUserAndMonth(
+                user.getUsername(), start, end)).thenReturn(List.of(route));
+
+        // When
+        List<RouteDto> result = routeService.getRoutesByYearAndMonth(
+                user.getUsername(), route.getDate().getYear(), route.getDate().getMonthValue()
+        );
+
+        // Then
+        assertEquals(1, result.size());
+        assertEquals(route.getName(), result.getFirst().getName());
     }
 
 

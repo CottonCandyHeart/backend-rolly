@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -70,12 +71,15 @@ public class UserServiceUnitTest {
 
         Route route = new Route();
         route.setCreatedBy(user);
+        route.setEstimatedTime(Duration.ofMinutes(30));
         routesCreated.add(route);
 
         user.setOrganizedEvents(organizedEvents);
         user.setAchievements(achievements);
         user.setAttendedEvents(attendedEvents);
         user.setRoutesCreated(routesCreated);
+
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
         // When
         UserResponseDto response = userService.getUserProfile(user.getUsername());
@@ -165,7 +169,7 @@ public class UserServiceUnitTest {
     @Test
     void shouldRemoveExistingUser(){
         // Given
-        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
 
         // When
         boolean result = userService.removeUser(user.getUsername());
@@ -177,7 +181,7 @@ public class UserServiceUnitTest {
     @Test
     void shouldReturnFalseForNonExistingUser(){
         // Given
-        when(userRepository.findById(user.getId())).thenReturn(Optional.empty());
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.empty());
 
         // When
         boolean result = userService.removeUser(user.getUsername());
