@@ -77,6 +77,7 @@ public class TrickService {
 
         if (!userProgress.getMasteredTricks().contains(trick.get())){
             userProgress.getMasteredTricks().add(trick.get());
+            userProgress.setTotalTricksLearned(userProgress.getTotalTricksLearned()+1);
             trick.get().getUserProgresses().add(userProgress);
 
             userProgressRepository.save(userProgress);
@@ -102,6 +103,7 @@ public class TrickService {
 
         if (userProgress.getMasteredTricks().contains(trick.get())){
             userProgress.getMasteredTricks().remove(trick.get());
+            userProgress.setTotalTricksLearned(userProgress.getTotalTricksLearned()-1);
             trick.get().getUserProgresses().remove(userProgress);
 
             userProgressRepository.save(userProgress);
@@ -120,6 +122,7 @@ public class TrickService {
                 trickRepository.save(t);
             }
             userProgress.getMasteredTricks().clear();
+            userProgress.setTotalTricksLearned(0);
             userProgressRepository.save(userProgress);
         }
     }
@@ -200,10 +203,16 @@ public class TrickService {
             List<Trick> tricks = c.getTricks();
             int allTricks = tricks.size();
             int mastered = 0;
-            Set<Trick> tricks2 = user.getUserProgress().getMasteredTricks();
-            for (Trick t : tricks2){
-                if (tricks.contains(t)) mastered++;
+
+            UserProgress up = user.getUserProgress();
+
+            if (up != null) {
+                Set<Trick> tricks2 = up.getMasteredTricks();
+                for (Trick t : tricks2){
+                    if (tricks.contains(t)) mastered++;
+                }
             }
+
             categoryProgressDtos.add(new CategoryProgressDto(
                     c.getName(),
                     allTricks,

@@ -2,10 +2,7 @@ package app.rolly.backend.service;
 
 import app.rolly.backend.dto.RouteDto;
 import app.rolly.backend.dto.TrainingPlanDto;
-import app.rolly.backend.model.Route;
-import app.rolly.backend.model.RoutePhoto;
-import app.rolly.backend.model.RoutePoint;
-import app.rolly.backend.model.User;
+import app.rolly.backend.model.*;
 import app.rolly.backend.repository.RouteRepository;
 import app.rolly.backend.repository.UserRepository;
 import jakarta.persistence.CascadeType;
@@ -66,11 +63,15 @@ public class RouteService {
     public boolean createRoute(RouteDto routeDto, String username){
         Optional<User> user = userRepository.findByUsername(username);
         Route route = new Route(routeDto, user.get());
-        System.out.println(route.getName());
-        System.out.println(route.getDistance());
-        System.out.println(route.getEstimatedTime());
         System.out.println(route.getDate());
         System.out.println(route.getCreatedBy());
+
+        UserProgress userProgress = user.get().getUserProgress();
+        userProgress.setTotalDistance(userProgress.getTotalDistance() + route.getDistance());
+        userProgress.setTotalSessions(userProgress.getTotalSessions()+1);
+        userProgress.setCaloriesBurned(userProgress.getCaloriesBurned() + route.getCaloriesBurned());
+        userProgress.setLastUpdated(LocalDateTime.now());
+
         routeRepository.save(route);
         return true;
     }

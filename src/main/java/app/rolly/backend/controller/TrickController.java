@@ -87,4 +87,6 @@ public class TrickController {
     public ResponseEntity<?> getProgress(Authentication authentication){
         return new ResponseEntity<>(trickService.getProgress(authentication.getName()),HttpStatus.OK);
     }
+
+
 }

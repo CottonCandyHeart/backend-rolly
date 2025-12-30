@@ -1,15 +1,8 @@
 package app.rolly.backend.service;
 
-import app.rolly.backend.dto.ChangeRoleDto;
-import app.rolly.backend.dto.RoleDto;
-import app.rolly.backend.dto.UserDto;
-import app.rolly.backend.dto.UserResponseDto;
-import app.rolly.backend.model.Event;
-import app.rolly.backend.model.Role;
-import app.rolly.backend.model.User;
-import app.rolly.backend.repository.EventRepository;
-import app.rolly.backend.repository.RoleRepository;
-import app.rolly.backend.repository.UserRepository;
+import app.rolly.backend.dto.*;
+import app.rolly.backend.model.*;
+import app.rolly.backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,6 +20,8 @@ public class AdminService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final EventRepository eventRepository;
+    private final CategoryRepository categoryRepository;
+    private final TrickRepository trickRepository;
 
     public List<UserResponseDto> getAllUsers(){
         return userRepository.findAll().stream()
@@ -82,6 +77,21 @@ public class AdminService {
         event.getAttendee().clear();
 
         eventRepository.removeEventByName(name);
+        return true;
+    }
+
+    @Transactional
+    public boolean updateTrickCategory(TrickDto trickDto){
+        Optional<Category> category = categoryRepository.findByName(trickDto.getCategoryName());
+
+        if (category.isEmpty()) return false;
+
+        Optional<Trick> trick = trickRepository.findByName(trickDto.getTrickName());
+
+        if (trick.isEmpty()) return false;
+
+        trick.get().setCategory(category.get());
+
         return true;
     }
 }

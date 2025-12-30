@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class RoutePhotoDto {
     private Long id;
     private double latitude;

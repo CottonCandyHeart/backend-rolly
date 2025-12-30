@@ -2,6 +2,7 @@ package app.rolly.backend.controller;
 
 import app.rolly.backend.dto.ChangeRoleDto;
 import app.rolly.backend.dto.RoleDto;
+import app.rolly.backend.dto.TrickDto;
 import app.rolly.backend.dto.UserDto;
 import app.rolly.backend.service.AdminService;
 import app.rolly.backend.service.UserProgressService;
@@ -45,6 +46,13 @@ public class AdminController {
         if (adminService.updateRole(changeRoleDto)) return new ResponseEntity<>("Role updated", HttpStatus.OK);
 
         return new ResponseEntity<>("Failed updating role", HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/update")
+    public ResponseEntity<?> changeTrickCategory(@RequestBody TrickDto trickDto){
+        if (adminService.updateTrickCategory(trickDto)) return new ResponseEntity<>("Role updated", HttpStatus.OK);
+
+        return new ResponseEntity<>("Failed updating category", HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/del/event/{name}")

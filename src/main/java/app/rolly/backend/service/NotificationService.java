@@ -17,10 +17,6 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
 
-    // TODO wysyłanie powiadomień użytkownikowi (np. „Twoje wydarzenie zaczyna się za godzinę!”).
-    //  aktualizacja statusu (read/unread), dodawanie, usuwanie
-    //  Joined event, left event, przypomnienie o evencie, przypomnienie o treningu itp
-
     public List<NotificationDto> getNotifications(String username){
         User user = userRepository.findByUsername(username).get();
         return notificationRepository.getNotificationsByRecipient(user).stream()
