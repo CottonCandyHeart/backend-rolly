@@ -21,7 +21,6 @@ import java.util.List;
 public class RouteDto {
     private String name;
     private double distance;
-    //private Duration estimatedTime;
     private long estimatedTime;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")

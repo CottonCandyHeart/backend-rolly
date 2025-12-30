@@ -44,12 +44,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                //.cors(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .formLogin(AbstractHttpConfigurer::disable)
-                //.formLogin(httpForm -> {
-                //    httpForm.loginPage("/auth/login").permitAll();
-                //})
                 .authorizeHttpRequests(registry -> {
                     registry.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
                     registry.requestMatchers("/auth/**").permitAll();
@@ -75,7 +71,6 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        //config.setAllowedOrigins(List.of("http://localhost:57036", "http://127.0.0.1:57036"));
         config.setAllowedOriginPatterns(List.of("http://localhost:*", "http://127.0.0.1:*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));

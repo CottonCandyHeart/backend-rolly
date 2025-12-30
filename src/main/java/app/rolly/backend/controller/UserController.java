@@ -45,19 +45,15 @@ public class UserController {
     @PostMapping("/remove")
     public ResponseEntity<?> removeUser(@RequestBody UserResponseDto userResponseDto, Authentication authentication){
         String admin = authentication.getName();
-        System.out.println(userResponseDto.getUsername());
 
         if (!admin.equals("admin")) {
-            System.out.println("admin if");
             return new ResponseEntity<>("Illegal role", HttpStatus.UNAUTHORIZED);
         }
 
         if (!userService.removeUser(userResponseDto.getUsername())){
-            System.out.println("username if");
             return new ResponseEntity<>("User doesn't exist", HttpStatus.BAD_REQUEST);
         }
 
-        System.out.println("its fine");
         return new ResponseEntity<>("User removed", HttpStatus.OK);
     }
 
@@ -76,7 +72,8 @@ public class UserController {
     }
 
     @PostMapping("/meas")
-    public ResponseEntity<?> updateMeasurements(@RequestBody UserMeasurementsDto userMeasurementsDto, Authentication authentication){
+    public ResponseEntity<?> updateMeasurements(@RequestBody UserMeasurementsDto userMeasurementsDto,
+                                                Authentication authentication){
         userService.updateMeasurements(userMeasurementsDto, authentication.getName());
         return new ResponseEntity<>("Measurements updated", HttpStatus.OK);
     }
@@ -86,3 +83,4 @@ public class UserController {
         return new ResponseEntity<>(userService.getMeasurements(authentication.getName()), HttpStatus.OK);
     }
 }
+
