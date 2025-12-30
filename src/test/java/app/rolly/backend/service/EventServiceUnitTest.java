@@ -336,6 +336,8 @@ public class EventServiceUnitTest {
                 1.1
         );
         Event event2 = new Event(
+                "event2",
+                "event2 desc",
                 user,
                 LocalDate.of(2025,1,1),
                 LocalTime.of(1,1,1),
@@ -377,6 +379,8 @@ public class EventServiceUnitTest {
                 1.1
         );
         Event event2 = new Event(
+                "event2",
+                "event2 desc",
                 user,
                 LocalDate.of(2025,1,1),
                 LocalTime.of(1,1,1),

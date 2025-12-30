@@ -109,6 +109,8 @@ public class UserRepositoryUnitTest {
         locationRepository.save(location);
 
         Event event1 = new Event(
+                "event1",
+                "event1 desc",
                 user,
                 LocalDate.of(2025, 1, 1),
                 LocalTime.of(12,20,0),
@@ -119,6 +121,8 @@ public class UserRepositoryUnitTest {
                 location
         );
         Event event2 = new Event(
+                "event2",
+                "event2 desc",
                 user,
                 LocalDate.of(2026, 2, 2),
                 LocalTime.of(10,10,10),

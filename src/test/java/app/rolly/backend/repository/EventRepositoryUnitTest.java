@@ -61,6 +61,8 @@ public class EventRepositoryUnitTest {
         eventDate = LocalDate.of(2025, 1, 1);
         time = LocalTime.of(12,20,0);
         event = new Event(
+                "event",
+                "event desc",
                 user,
                 eventDate,
                 time,
@@ -95,7 +97,7 @@ public class EventRepositoryUnitTest {
         assertEquals(user, foundEvent.get().getOrganizer());
         assertEquals(eventDate, foundEvent.get().getDate());
         assertEquals(time, foundEvent.get().getTime());
-        assertEquals("testCity", foundEvent.get().getCity());
+        assertEquals("TESTCITY", foundEvent.get().getCity());
         assertEquals("testLevel", foundEvent.get().getLevel());
         assertEquals("testType", foundEvent.get().getType());
         assertEquals("testAge", foundEvent.get().getAge());

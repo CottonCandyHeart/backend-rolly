@@ -24,7 +24,7 @@ public class TrickRepositoryUnitTest {
 
     @BeforeEach
     void set(){
-        category = new Category("testCathegory");
+        category = new Category("testCategory");
         categoryRepository.save(category);
 
         trick = new Trick(
