@@ -48,7 +48,8 @@ public class UserProgressServiceUnitTest {
                 2,
                 3,
                 4,
-                LocalDateTime.of(2025,1,1,1,1,1),
+                LocalDateTime.of(2025,1,
+                        1,1,1,1),
                 user
         );
 
